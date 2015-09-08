@@ -1,6 +1,3 @@
-# Build image
-docker build -t hadoop_distributed node
-
 # Start containers
 docker run -dit -P --name=master -v /data:/data hadoop_distributed
 docker run -dit -P --name=slave1 -v /data:/data hadoop_distributed
