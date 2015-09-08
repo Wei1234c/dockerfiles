@@ -1,21 +1,24 @@
-# Hadoop pseudo-distributed dockerfile for armv7
+# Hadoop full-distributed dockerfile for armv7
 
 
-by: [Wei Lin](mailto://wei1234c@gmail.com) / date: 2015/9/6
+by: [Wei Lin](mailto://wei1234c@gmail.com) / date: 2015/9/8
 
 
 ## To build image: ##
 
     cd /path/of/the/Dockerfile
     
-    docker build -t hadoop_pseudo-distributed .
+    docker build -t hadoop_distributed .
 
 
 
 ##  To start a container: ##
 
-    docker run -d -P --name=hadoop_pseudo hadoop_pseudo-distributed
+    docker run -dit -P --name=hadoop_distributed hadoop_distributed
 
+##  To start a cluster: ##
+
+    start.sh
 
 
 ----------
