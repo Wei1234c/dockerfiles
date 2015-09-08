@@ -14,9 +14,14 @@ echo "${slave1_ip} slave1" >> /data/etc/hosts
 echo "${slave2_ip} slave2" >> /data/etc/hosts
 
 # Test networking
+docker exec master cat /etc/hosts
 docker exec master ping -c 1 slave1
 docker exec master ping -c 1 slave2
+
+docker exec slave1 cat /etc/hosts
 docker exec slave1 ping -c 1 master
+
+docker exec slave2 cat /etc/hosts
 docker exec slave2 ping -c 1 master
 
 # Startup cluster

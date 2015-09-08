@@ -7,4 +7,5 @@ docker build -t mysql mysql
 docker build -t mongodb mongodb
 docker build -t apache apache
 docker build -t tomcat tomcat
-# docker build -t hadoop_pseudo-distributed hadoop/pseudo-distributed
+docker build -t hadoop_pseudo-distributed hadoop/pseudo-distributed
+docker build -t hadoop_distributed hadoop/cluster/node

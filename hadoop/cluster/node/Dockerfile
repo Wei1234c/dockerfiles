@@ -104,7 +104,7 @@ RUN \
 VOLUME /data
 
 # Add Hosts hook
-RUN  echo "source /data/etc/hosts" >> /etc/hosts
+RUN  echo ". /data/etc/hosts" >> /etc/hosts
 
 # Format namenode
 # RUN  ${HADOOP_HOME}/bin/hdfs namenode -format
