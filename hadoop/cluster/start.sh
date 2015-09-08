@@ -1,3 +1,4 @@
+#!/bin/bash
 # Start containers
 docker run -dit -P --name=master -v /data:/data hadoop_distributed
 docker run -dit -P --name=slave1 -v /data:/data hadoop_distributed
@@ -33,10 +34,20 @@ docker exec slave2 ping -c 1 master
 
 
 
-# # Startup cluster
+# Startup cluster
 HADOOP_HOME=/usr/local/hadoop
 docker exec master ${HADOOP_HOME}/bin/hdfs namenode -format
-# docker exec slave1 ${HADOOP_HOME}/bin/hdfs datanode -format
-# docker exec slave2 ${HADOOP_HOME}/bin/hdfs datanode -format
-docker exec master ${HADOOP_HOME}/sbin/start-all.sh
+docker exec slave1 ${HADOOP_HOME}/bin/hdfs namenode -format
+docker exec slave2 ${HADOOP_HOME}/bin/hdfs namenode -format
+# docker exec master ${HADOOP_HOME}/sbin/start-all.sh
+docker exec master /etc/bootstrap.sh
+docker exec slave1 /etc/bootstrap.sh
+docker exec slave2 /etc/bootstrap.sh
+
+
+# Clean up
+# docker stop $(docker ps -q)
+# docker rm $(docker ps -aq)
+
+
 
