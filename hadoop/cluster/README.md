@@ -1,4 +1,4 @@
-# Hadoop full-distributed dockerfile for armv7
+# Hadoop full-distributed dockerfile for ARMv7
 
 
 by: [Wei Lin](mailto://wei1234c@gmail.com) / date: 2015/9/8

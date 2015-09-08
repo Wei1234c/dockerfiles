@@ -87,7 +87,7 @@ RUN \
      mkdir ${HADOOP_HOME}/input && \
      cp ${HADOOP_CONF_DIR}/*.xml ${HADOOP_INPUT_DIR}
 
-# pseudo distributed
+# Copy configuration files.
 ADD  config/hdfs-site.xml ${HADOOP_CONF_DIR}/hdfs-site.xml
 ADD  config/mapred-site.xml ${HADOOP_CONF_DIR}/mapred-site.xml
 ADD  config/yarn-site.xml ${HADOOP_CONF_DIR}/yarn-site.xml
@@ -103,8 +103,8 @@ RUN \
 # Add volume
 VOLUME /data
 
-# Add Hosts hook
-RUN  echo ". /data/etc/hosts" >> /etc/hosts
+# Directory for hadoop.tmp.dir
+RUN mkdir /hadoop.tmp.dir
 
 # Format namenode
 # RUN  ${HADOOP_HOME}/bin/hdfs namenode -format
