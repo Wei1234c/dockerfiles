@@ -94,14 +94,22 @@ ADD  config/yarn-site.xml ${HADOOP_CONF_DIR}/yarn-site.xml
 ADD  config/core-site.xml.template ${HADOOP_CONF_DIR}/core-site.xml.template
 RUN  sed s/HOSTNAME/master/ ${HADOOP_CONF_DIR}/core-site.xml.template > ${HADOOP_CONF_DIR}/core-site.xml  
 
+# Set master and slaves names
 RUN \
-	mkdir /data && \
 	echo "master" >  ${HADOOP_CONF_DIR}/masters && \
 	echo "slave1" >  ${HADOOP_CONF_DIR}/slaves && \
 	echo "slave2" >> ${HADOOP_CONF_DIR}/slaves
 
+# Add volume
+VOLUME /data
+
+# Add Hosts hook
+RUN  echo "source /data/etc/hosts" >> /etc/hosts
+
+# Format namenode
 # RUN  ${HADOOP_HOME}/bin/hdfs namenode -format
 
+# Config SSH port and security.
 ADD  config/ssh_config /root/.ssh/config
 RUN \
      chmod 600 /root/.ssh/config && \
@@ -121,6 +129,7 @@ RUN \
 #
 # ADD config/supervisord.conf /etc/supervisord.conf
 
+# Add bootstrap.sh
 ADD  config/bootstrap.sh /etc/bootstrap.sh
 RUN \
      chown root:root /etc/bootstrap.sh && \
@@ -135,9 +144,11 @@ RUN \
      chmod +x ${HADOOP_CONF_DIR}/*-env.sh && \
      ls -la ${HADOOP_CONF_DIR}/*-env.sh
 
+# 
 # RUN service ssh start && ${HADOOP_CONF_DIR}/hadoop-env.sh && ${HADOOP_HOME}/sbin/start-dfs.sh && ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /user/root
 # RUN service ssh start && ${HADOOP_CONF_DIR}/hadoop-env.sh && ${HADOOP_HOME}/sbin/start-dfs.sh && ${HADOOP_HOME}/bin/hdfs dfs -put ${HADOOP_CONF_DIR} input
 
+# Boot up
 # CMD ["/etc/bootstrap.sh", "-d"]
 CMD ["bash"]
 
