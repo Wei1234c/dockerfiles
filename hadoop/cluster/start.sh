@@ -1,7 +1,10 @@
+# Build image
+docker build -t hadoop_distributed node
+
 # Start containers
-docker run -dit -P --name=master -v /data:/data hadoop_distributed bash
-docker run -dit -P --name=slave1 -v /data:/data hadoop_distributed bash
-docker run -dit -P --name=slave2 -v /data:/data hadoop_distributed bash
+docker run -dit -P --name=master -v /data:/data hadoop_distributed
+docker run -dit -P --name=slave1 -v /data:/data hadoop_distributed
+docker run -dit -P --name=slave2 -v /data:/data hadoop_distributed
 
 # Get containers' IP addresses
 master_ip="$(docker inspect master | grep IPAddress | sed 's/["IPAddress",\:,\s,\",\,]//g')"

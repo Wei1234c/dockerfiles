@@ -6,6 +6,7 @@
 # by: Wei Lin
 # date: 2015/9/6
 # to build image: 
+#       cd /path/to/the/dockerfile
 #		docker build -t hadoop_pseudo-distributed .
 # to start container: 
 #		docker run -dit -P --name=hadoop hadoop_pseudo-distributed
