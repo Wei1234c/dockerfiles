@@ -5,17 +5,8 @@
 #
 # by: Wei Lin
 # date: 2015/9/6
-# to build image: 
-#		docker build -t hadoop_pseudo-distributed .
-# to start container: 
-#		docker run -dit -P --name=hadoop hadoop_pseudo-distributed
-# to test: 
-#	clear output folder:
-#		docker exec hadoop rm -rf /usr/local/hadoop/output
-# 	run the mapreduce:
-#		docker exec hadoop /usr/local/hadoop/bin/hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.1.jar grep input output 'dfs[a-z.]+'
-# 	check the output:
-#		docker exec hadoop /usr/local/hadoop/bin/hdfs dfs -cat output/*
+# to build image: docker build -t hadoop_pseudo-distributed .
+# to test: docker run -d -P --name=hadoop_pseudo hadoop_pseudo-distributed
 
 # Pull base image.
 FROM armv7/armhf-ubuntu:14.04
@@ -82,17 +73,16 @@ RUN \
      ln -s ./hadoop-${HADOOP_VERSION} hadoop && \
      apt-get remove -y curl
 
-# Discard native code
+# discard native code
 RUN  rm -rf ${HADOOP_HOME}/lib/native
 
 # Modify hadoop-env.sh	 
 RUN \
      env && \
      sed -i "/^export JAVA_HOME/ s:.*:export JAVA_HOME=${JAVA_HOME}\nexport HADOOP_HOME=/usr/local/hadoop\nexport HADOOP_PREFIX=${HADOOP_HOME}\n:" ${HADOOP_CONF_DIR}/hadoop-env.sh && \
-     sed -i "/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop:" ${HADOOP_CONF_DIR}/hadoop-env.sh && \
-	 echo "export HADOOP_HEAPSIZE=128" >> ${HADOOP_CONF_DIR}/hadoop-env.sh
+     sed -i "/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop:" ${HADOOP_CONF_DIR}/hadoop-env.sh
      
-# Prepare input
+# Backup *.xml ?
 RUN \	 
      mkdir ${HADOOP_HOME}/input && \
      cp ${HADOOP_CONF_DIR}/*.xml ${HADOOP_INPUT_DIR}

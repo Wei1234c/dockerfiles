@@ -1,21 +1,12 @@
-# Hadoop dockerfile for armv7
+# Hadoop distributed mode dockerfile for armv7
 # Ref 1: https://github.com/dockerfile/java/tree/master/oracle-java8
 # Ref 2: https://docs.docker.com/examples/running_ssh_service/
 # Ref 3: https://github.com/sequenceiq/hadoop-docker
 #
 # by: Wei Lin
-# date: 2015/9/6
-# to build image: 
-#		docker build -t hadoop_pseudo-distributed .
-# to start container: 
-#		docker run -dit -P --name=hadoop hadoop_pseudo-distributed
-# to test: 
-#	clear output folder:
-#		docker exec hadoop rm -rf /usr/local/hadoop/output
-# 	run the mapreduce:
-#		docker exec hadoop /usr/local/hadoop/bin/hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.1.jar grep input output 'dfs[a-z.]+'
-# 	check the output:
-#		docker exec hadoop /usr/local/hadoop/bin/hdfs dfs -cat output/*
+# date: 2015/9/7
+# to build image: docker build -t hadoop_distributed .
+# to test: docker run -dit -P --name=hadoop_distributed hadoop_distributed
 
 # Pull base image.
 FROM armv7/armhf-ubuntu:14.04
@@ -40,7 +31,6 @@ RUN \
 	 
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 ENV PATH ${PATH}:${JAVA_HOME}/bin
-
 
 
 # Install SSH ________________________________________________________________________________________________
@@ -102,9 +92,15 @@ ADD  config/hdfs-site.xml ${HADOOP_CONF_DIR}/hdfs-site.xml
 ADD  config/mapred-site.xml ${HADOOP_CONF_DIR}/mapred-site.xml
 ADD  config/yarn-site.xml ${HADOOP_CONF_DIR}/yarn-site.xml
 ADD  config/core-site.xml.template ${HADOOP_CONF_DIR}/core-site.xml.template
-RUN  sed s/HOSTNAME/localhost/ ${HADOOP_CONF_DIR}/core-site.xml.template > ${HADOOP_CONF_DIR}/core-site.xml  
+RUN  sed s/HOSTNAME/master/ ${HADOOP_CONF_DIR}/core-site.xml.template > ${HADOOP_CONF_DIR}/core-site.xml  
 
-RUN  ${HADOOP_HOME}/bin/hdfs namenode -format
+RUN \
+	mkdir /data && \
+	echo "master" >  ${HADOOP_CONF_DIR}/masters && \
+	echo "slave1" >  ${HADOOP_CONF_DIR}/slaves && \
+	echo "slave2" >> ${HADOOP_CONF_DIR}/slaves
+
+# RUN  ${HADOOP_HOME}/bin/hdfs namenode -format
 
 ADD  config/ssh_config /root/.ssh/config
 RUN \
@@ -139,15 +135,16 @@ RUN \
      chmod +x ${HADOOP_CONF_DIR}/*-env.sh && \
      ls -la ${HADOOP_CONF_DIR}/*-env.sh
 
-RUN service ssh start && ${HADOOP_CONF_DIR}/hadoop-env.sh && ${HADOOP_HOME}/sbin/start-dfs.sh && ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /user/root
-RUN service ssh start && ${HADOOP_CONF_DIR}/hadoop-env.sh && ${HADOOP_HOME}/sbin/start-dfs.sh && ${HADOOP_HOME}/bin/hdfs dfs -put ${HADOOP_CONF_DIR} input
+# RUN service ssh start && ${HADOOP_CONF_DIR}/hadoop-env.sh && ${HADOOP_HOME}/sbin/start-dfs.sh && ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /user/root
+# RUN service ssh start && ${HADOOP_CONF_DIR}/hadoop-env.sh && ${HADOOP_HOME}/sbin/start-dfs.sh && ${HADOOP_HOME}/bin/hdfs dfs -put ${HADOOP_CONF_DIR} input
 
-CMD ["/etc/bootstrap.sh", "-d"]
+# CMD ["/etc/bootstrap.sh", "-d"]
+CMD ["bash"]
 
 # Hdfs ports
 EXPOSE 50010 50020 50030 50070 50075 50090
 # Mapred ports
-EXPOSE 19888
+EXPOSE 19888 9000 9001
 # Yarn ports
 EXPOSE 8030 8031 8032 8033 8040 8042 8088
 # Other ports
