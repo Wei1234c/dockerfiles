@@ -1,3 +1,6 @@
+docker pull armv7/armhf-ubuntu:14.04
+docker tag armv7/armhf-ubuntu:14.04 ubuntu:14.04
+docker tag ubuntu:14.04 ubuntu:latest
 docker build -t oracle-java8 java/oracle-java8
 docker build -t sshd sshd
 docker build -t oracle-java8_sshd java_sshd
