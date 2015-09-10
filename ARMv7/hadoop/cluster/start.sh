@@ -48,8 +48,8 @@ docker exec slave2 /etc/bootstrap.sh
 
 
 # Clean up
-docker stop $(docker ps -q)
-docker rm $(docker ps -aq)
+# docker stop $(docker ps -q)
+# docker rm $(docker ps -aq)
 
 
 
