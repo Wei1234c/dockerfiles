@@ -5,9 +5,9 @@ docker run -dit -P --name=slave1 -v /data:/data hadoop_distributed
 docker run -dit -P --name=slave2 -v /data:/data hadoop_distributed
 
 # Get containers' IP addresses
-master_ip="$(docker inspect master -f {{.NetworkSettings.IPAddress}})
-slave1_ip="$(docker inspect slave1 -f {{.NetworkSettings.IPAddress}})
-slave2_ip="$(docker inspect slave2 -f {{.NetworkSettings.IPAddress}})
+master_ip="$(docker inspect -f {{.NetworkSettings.IPAddress}} master)"
+slave1_ip="$(docker inspect -f {{.NetworkSettings.IPAddress}} slave1)"
+slave2_ip="$(docker inspect -f {{.NetworkSettings.IPAddress}} slave2)"
 
 # Add hosts
 # Make sure you have write permission to the /data/etc/hosts on host.
