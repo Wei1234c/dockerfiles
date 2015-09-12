@@ -6,6 +6,7 @@ docker build -t sshd sshd
 docker build -t oracle-java8_sshd java_sshd
 docker build -t python python
 docker build -t nodejs nodejs
+docker build -t php php
 docker build -t mysql mysql
 docker build -t mongodb mongodb
 docker build -t apache apache
