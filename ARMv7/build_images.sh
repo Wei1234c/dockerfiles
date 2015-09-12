@@ -13,3 +13,6 @@ docker build -t tomcat tomcat
 docker build -t hadoop_pseudo-distributed hadoop/pseudo-distributed
 docker tag hadoop_pseudo-distributed wei1234c/hadoop_pseudo-distributed_armv7
 docker build -t hadoop_distributed hadoop/cluster/node
+docker build -t haproxy haproxy/1.5
+
+
