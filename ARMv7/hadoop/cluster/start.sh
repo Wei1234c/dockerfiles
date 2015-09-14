@@ -1,8 +1,9 @@
 #!/bin/bash
+
 # Start containers
-docker run -dit -P --name=master -v /data:/data hadoop_distributed
-docker run -dit -P --name=slave1 -v /data:/data hadoop_distributed
-docker run -dit -P --name=slave2 -v /data:/data hadoop_distributed
+docker run -dit -P --name=master -v /data:/data hadoop_full-distributed
+docker run -dit -P --name=slave1 -v /data:/data hadoop_full-distributed
+docker run -dit -P --name=slave2 -v /data:/data hadoop_full-distributed
 
 # Get containers' IP addresses
 master_ip="$(docker inspect -f {{.NetworkSettings.IPAddress}} master)"
@@ -36,15 +37,29 @@ docker exec slave2 ping -c 1 master
 
 
 
-# Startup cluster
+# format namenode
 HADOOP_HOME=/usr/local/hadoop
 docker exec master ${HADOOP_HOME}/bin/hdfs namenode -format
-docker exec slave1 ${HADOOP_HOME}/bin/hdfs namenode -format
-docker exec slave2 ${HADOOP_HOME}/bin/hdfs namenode -format
-# docker exec master ${HADOOP_HOME}/sbin/start-all.sh
+# docker exec slave1 ${HADOOP_HOME}/bin/hdfs namenode -format
+# docker exec slave2 ${HADOOP_HOME}/bin/hdfs namenode -format
+
+# start sshd
+docker exec master service ssh start
+docker exec slave1 service ssh start
+docker exec slave2 service ssh start
+
+# Startup cluster
 docker exec master /etc/bootstrap.sh
-docker exec slave1 /etc/bootstrap.sh
-docker exec slave2 /etc/bootstrap.sh
+# docker exec master ${HADOOP_HOME}/sbin/start-all.sh
+# docker exec master ${HADOOP_HOME}/sbin/start-dfs.sh
+# docker exec master ${HADOOP_HOME}/sbin/start-yarn.sh
+
+# Stop cluster
+# docker exec master ${HADOOP_HOME}/sbin/stop-dfs.sh
+# docker exec master ${HADOOP_HOME}/sbin/stop-yarn.sh
+
+
+
 
 
 # Clean up
