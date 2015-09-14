@@ -40,8 +40,6 @@ docker exec slave2 ping -c 1 master
 # format namenode
 HADOOP_HOME=/usr/local/hadoop
 docker exec master ${HADOOP_HOME}/bin/hdfs namenode -format
-# docker exec slave1 ${HADOOP_HOME}/bin/hdfs namenode -format
-# docker exec slave2 ${HADOOP_HOME}/bin/hdfs namenode -format
 
 # start sshd
 docker exec master service ssh start
@@ -54,13 +52,13 @@ docker exec master /etc/bootstrap.sh
 # docker exec master ${HADOOP_HOME}/sbin/start-dfs.sh
 # docker exec master ${HADOOP_HOME}/sbin/start-yarn.sh
 
+
+
+
+
 # Stop cluster
 # docker exec master ${HADOOP_HOME}/sbin/stop-dfs.sh
 # docker exec master ${HADOOP_HOME}/sbin/stop-yarn.sh
-
-
-
-
 
 # Clean up
 # docker stop $(docker ps -q)

@@ -2,56 +2,56 @@ docker pull armv7/armhf-ubuntu:14.04
 docker tag armv7/armhf-ubuntu:14.04 ubuntu:14.04
 docker tag ubuntu:14.04 ubuntu:latest
 
-docker build -t wei1234/oracle-java8 java/oracle-java8
-docker tag wei1234/oracle-java8 oracle-java8
+docker build -t oracle-java8 java/oracle-java8
+# docker tag oracle-java8  wei1234c/oracle-java8
 
-docker build -t wei1234/sshd sshd
-docker tag wei1234/sshd sshd
+docker build -t sshd sshd
+# docker tag sshd wei1234c/sshd 
 
-docker build -t wei1234/oracle-java8_sshd java_sshd
-docker tag wei1234/sshd sshd
+docker build -t oracle-java8_sshd java_sshd
+# docker tag oracle-java8_sshd wei1234c/oracle-java8_sshd
 
-docker build -t wei1234/python python
-docker tag wei1234/python python
+docker build -t python python
+# docker tag python wei1234c/python
 
-docker build -t wei1234/nodejs nodejs
-docker tag wei1234/nodejs nodejs
+docker build -t nodejs nodejs
+# docker tag nodejs wei1234c/nodejs
 
-docker build -t wei1234/php:5 php/5
-docker tag wei1234/php:5 php:5
+docker build -t php:5 php/5
+# docker tag php:5 wei1234c/php:5
 
-docker build -t wei1234/php:cli php/5.6
-docker tag wei1234/php:cli php:cli
+docker build -t php:cli php/5.6
+# docker tag php:cli wei1234c/php:cli
 
-# docker build -t wei1234/php:apache php/5.6/apache
+# docker build -t php:apache php/5.6/apache
+# docker tag php:apache wei1234c/php:apache
 
-docker build -t wei1234/mysql mysql
-docker tag wei1234/mysql mysql
+docker build -t mysql mysql
+# docker tag mysql wei1234c/mysql
 
-docker build -t wei1234/mongodb mongodb
-docker tag wei1234/mongodb mongodb
+docker build -t mongodb mongodb
+# docker tag mongodb wei1234c/mongodb
 
-docker build -t wei1234/apache apache
-docker tag wei1234/apache apache
+docker build -t apache apache
+# docker tag apache wei1234c/apache
 
-docker build -t wei1234/tomcat tomcat
-docker tag wei1234/tomcat tomcat
+docker build -t tomcat tomcat
+# docker tag tomcat wei1234c/tomcat
 
-docker build -t wei1234/hadoop_pseudo-distributed hadoop/pseudo-distributed
-docker tag wei1234/hadoop_pseudo-distributed hadoop_pseudo-distributed
-docker tag wei1234/hadoop_pseudo-distributed wei1234c/hadoop_pseudo-distributed_armv7
+docker build -t hadoop_pseudo-distributed hadoop/pseudo-distributed
+# docker tag hadoop_pseudo-distributed wei1234c/hadoop_pseudo-distributed_armv7
 
-docker build -t wei1234/hadoop_full-distributed hadoop/cluster/node
-docker tag wei1234/hadoop_full-distributed hadoop_full-distributed
+docker build -t hadoop_full-distributed hadoop/cluster/node
+# docker tag hadoop_full-distributed wei1234c/hadoop_full-distributed
 
-docker build -t wei1234/haproxy haproxy/1.5
-docker tag wei1234/haproxy haproxy
+docker build -t haproxy haproxy/1.5
+# docker tag haproxy wei1234c/haproxy
 
-docker build -t wei1234/jupyter-notebook notebook
-docker tag wei1234/jupyter-notebook jupyter-notebook
+docker build -t jupyter-notebook notebook
+# docker tag jupyter-notebook wei1234c/jupyter-notebook
 
-docker build -t wei1234/lamp lamp
-docker tag wei1234/lamp lamp
+docker build -t lamp lamp
+# docker tag lamp wei1234c/lamp
 
 
 
