@@ -1,3 +1,5 @@
+#!/bin/bash
+
 docker pull armv7/armhf-ubuntu:14.04
 docker tag armv7/armhf-ubuntu:14.04 ubuntu:14.04
 docker tag ubuntu:14.04 ubuntu:latest

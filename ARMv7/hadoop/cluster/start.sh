@@ -57,6 +57,7 @@ docker exec master /etc/bootstrap.sh
 
 
 # Stop cluster
+# HADOOP_HOME=/usr/local/hadoop
 # docker exec master ${HADOOP_HOME}/sbin/stop-dfs.sh
 # docker exec master ${HADOOP_HOME}/sbin/stop-yarn.sh
 
