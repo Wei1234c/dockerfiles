@@ -7,6 +7,9 @@ docker tag ubuntu:14.04 ubuntu:latest
 docker build -t oracle-java8 java/oracle-java8
 # docker tag oracle-java8  wei1234c/oracle-java8
 
+docker build -t rpi-dev-java rpi-dev-java
+# docker tag rpi-dev-java  caterpillar/rpi-dev-java
+
 docker build -t sshd sshd
 # docker tag sshd wei1234c/sshd 
 
