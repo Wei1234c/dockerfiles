@@ -11,7 +11,7 @@ do
 
 	# Add hosts
 	# Make sure you have write permission to the /data/etc/hosts on host.
-	echo "${${node_name}_ip} ${node_name}" >  /data/etc/hosts
+	echo "${${node_name}_ip}  ${node_name}" >  /data/etc/hosts
 done
 
 echo "/data/etc/hosts : "
