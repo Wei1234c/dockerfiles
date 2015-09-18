@@ -1,5 +1,24 @@
 # lubuntu-desktop
 # ref: https://github.com/dockerfile/ubuntu-desktop/blob/master/Dockerfile
+# to launch:
+# ddesktop(){
+	# docker run \
+	# -dit \
+	# -p 2022:22 \
+	# -p 3389:3389 \
+	# -p 3389:3389/udp \
+	# -p 5800:5800 \
+	# -p 5800:5800/udp \
+	# -p 5900:5900 \
+	# -p 5900:5900/udp \
+	# -p 5901:5901 \
+	# -p 5901:5901/udp \
+	# --name=desktop \
+	# lubuntu-desktop 
+	
+	# docker exec desktop service ssh start
+	# docker exec desktop service xrdp start
+# }
 
 FROM armv7/armhf-ubuntu:14.04
 
@@ -45,9 +64,12 @@ RUN \
 	
 # .xsession __________________________
 RUN \
-	echo lxsession -s Lubuntu -e LXDE > ~/.xsession && \
+	echo lxsession -s Lubuntu -e LXDE > /root/.xsession && \
 	cp /root/.xsession /home/pi/ && \
-	/etc/init.d/xrdp restart
+	service xrdp stop && \
+	rm -f /run/xrdp/xrdp.pid && \
+	rm -f /var/run/xrdp/xrdp-sesman.pid
+	 
 
 	
 # VNC setting __________________________
@@ -55,7 +77,7 @@ ENV	USER	root
 
 RUN \
 	mkdir ~/.vnc && \
-	echo  "12345678" | vncpasswd -f > ~/.vnc/passwd
+	echo "12345678" | vncpasswd -f > ~/.vnc/passwd
 
 # RUN	vncserver
 

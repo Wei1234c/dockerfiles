@@ -21,7 +21,10 @@ ddesktop(){
 	-p 5901:5901 \
 	-p 5901:5901/udp \
 	--name=desktop \
-	lubuntu-desktop
+	lubuntu-desktop 
+	
+	docker exec desktop service ssh start
+	docker exec desktop service xrdp start
 }
 
 dhadoopcluster(){
