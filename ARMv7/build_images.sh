@@ -7,7 +7,7 @@ docker tag ubuntu:14.04 ubuntu:latest
 docker build -t oracle-java8 java/oracle-java8
 # docker tag oracle-java8  wei1234c/oracle-java8
 
-docker build -t rpi-dev-java rpi-dev-java
+# docker build -t rpi-dev-java rpi-dev-java
 # docker tag rpi-dev-java  caterpillar/rpi-dev-java
 
 docker build -t sshd sshd
@@ -58,6 +58,13 @@ docker build -t jupyter-notebook notebook
 docker build -t lamp lamp
 # docker tag lamp wei1234c/lamp
 
+docker build -t lubuntu-desktop lubuntu-desktop
+# docker tag lubuntu-desktop wei1234c/lubuntu-desktop
 
+# docker build -t ubuntu-desktop ubuntu-desktop
+# docker tag ubuntu-desktop wei1234c/ubuntu-desktop
+
+# docker build -t desktop desktop
+# docker tag desktop wei1234c/desktop
 
 

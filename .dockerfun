@@ -8,7 +8,23 @@
 # Helper Functions
 #
 
-drunhadoopcluster(){
+ddesktop(){
+	docker run \
+	-dit \
+	-p 2022:22 \
+	-p 3389:3389 \
+	-p 3389:3389/udp \
+	-p 5800:5800 \
+	-p 5800:5800/udp \
+	-p 5900:5900 \
+	-p 5900:5900/udp \
+	-p 5901:5901 \
+	-p 5901:5901/udp \
+	--name=desktop \
+	lubuntu-desktop
+}
+
+dhadoopcluster(){
 	/dockerfiles/ARMv7/hadoop/cluster/start.sh
 }
 
@@ -55,7 +71,7 @@ nginx_config(){
 	server_name ${server};
 
 	location / {
-	proxy_pass  http://${server};
+	proxy_pass http://${server};
 	proxy_http_version 1.1;
 	proxy_set_header Upgrade \$http_upgrade;
 	proxy_set_header Connection "upgrade";
@@ -116,7 +132,7 @@ cadvisor(){
 		--restart always \
 		-v /:/rootfs:ro \
 		-v /var/run:/var/run:rw \
-		-v /sys:/sys:ro  \
+		-v /sys:/sys:ro \
 		-v /var/lib/docker/:/var/lib/docker:ro \
 		-p 1234:8080 \
 		--name cadvisor \
@@ -253,7 +269,7 @@ hollywood(){
 		jess/hollywood
 }
 
-htop(){
+dhtop(){
 	docker run --rm -it \
 		--pid host \
 		--name htop \
@@ -750,7 +766,7 @@ vagrant(){
 
 	docker run -it \
 		-v /etc/localtime:/etc/localtime:ro \
-		-v /tmp/.X11-unix:/tmp/.X11-unix  \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
 		-e GDK_SCALE \
 		-e GDK_DPI_SCALE \
@@ -774,7 +790,7 @@ virtualbox(){
 
 	docker run -d \
 		-v /etc/localtime:/etc/localtime:ro \
-		-v /tmp/.X11-unix:/tmp/.X11-unix  \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
 		-e GDK_SCALE \
 		-e GDK_DPI_SCALE \
@@ -791,7 +807,7 @@ visualstudio(){
 
 	docker run -d \
 		-v /etc/localtime:/etc/localtime:ro \
-		-v /tmp/.X11-unix:/tmp/.X11-unix  \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
 		--name visualstudio \
 		jess/visualstudio
