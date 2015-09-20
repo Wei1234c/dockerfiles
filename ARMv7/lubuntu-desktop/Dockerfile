@@ -18,7 +18,9 @@
 	
 	# docker exec desktop service ssh start
 	# docker exec desktop service xrdp start
+	# docker exec desktop vncserver
 # }
+# vncpassword: 12345678
 
 FROM armv7/armhf-ubuntu:14.04
 
@@ -41,7 +43,8 @@ RUN \
 RUN \
 	apt-get update && \
 	apt-get install -y openssh-server && \
-	mkdir /var/run/sshd
+	mkdir /var/run/sshd && \
+	service ssh stop
 
 # root password and login permission / use user pi instead
 # SSH login fix. Otherwise user is kicked off after login
@@ -49,7 +52,7 @@ RUN \
 	sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
 	sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
-RUN	service ssh restart
+# RUN	service ssh restart
 
 
  
@@ -59,7 +62,8 @@ RUN \
 	lubuntu-desktop \
 	tightvncserver \
 	xrdp \
-	chromium-browser
+	chromium-browser \
+	htop
 
 	
 # .xsession __________________________
@@ -76,8 +80,9 @@ RUN \
 ENV	USER	root
 
 RUN \
-	mkdir ~/.vnc && \
-	echo "12345678" | vncpasswd -f > ~/.vnc/passwd
+	mkdir /root/.vnc && \
+	echo "12345678" | vncpasswd -f > /root/.vnc/passwd && \
+	chmod 600 /root/.vnc/passwd
 
 # RUN	vncserver
 

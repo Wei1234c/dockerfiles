@@ -25,6 +25,7 @@ ddesktop(){
 	
 	docker exec desktop service ssh start
 	docker exec desktop service xrdp start
+	docker exec desktop vncserver
 }
 
 dhadoopcluster(){
