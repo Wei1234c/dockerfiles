@@ -28,6 +28,10 @@ ddesktop(){
 	docker exec desktop vncserver
 }
 
+dhadooppseudo(){
+	docker run -dit -P -v /data:/data --name=hadoop hadoop_pseudo-distributed /bin/bash 
+}
+
 dhadoopcluster(){
 	/dockerfiles/ARMv7/hadoop/cluster/start.sh
 }

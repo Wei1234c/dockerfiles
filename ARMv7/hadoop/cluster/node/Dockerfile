@@ -61,6 +61,7 @@ ENV HADOOP_COMMON_HOME ${HADOOP_HOME}
 ENV HADOOP_HDFS_HOME ${HADOOP_HOME}
 ENV HADOOP_MAPRED_HOME ${HADOOP_HOME}
 ENV HADOOP_YARN_HOME ${HADOOP_HOME}
+ENV HADOOP_CLASSPATH=${JAVA_HOME}/lib/tools.jar
 ENV YARN_CONF_DIR ${HADOOP_CONF_DIR}
 	 
 # Download script and jars from remote.
@@ -80,7 +81,7 @@ RUN \
      env && \
      sed -i "/^export JAVA_HOME/ s:.*:export JAVA_HOME=${JAVA_HOME}\nexport HADOOP_HOME=/usr/local/hadoop\nexport HADOOP_PREFIX=${HADOOP_HOME}\n:" ${HADOOP_CONF_DIR}/hadoop-env.sh && \
      sed -i "/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop:" ${HADOOP_CONF_DIR}/hadoop-env.sh && \
-	 echo "export HADOOP_HEAPSIZE=128" >> ${HADOOP_CONF_DIR}/hadoop-env.sh
+	 echo "export HADOOP_HEAPSIZE=256" >> ${HADOOP_CONF_DIR}/hadoop-env.sh
      
 # Prepare input
 RUN \	 
@@ -166,25 +167,36 @@ EXPOSE 22
 
 
 
+
 # Misc. ______________________________________________________________________________________________________
 
 # Set time zone
 RUN \
-     echo "Asia/Taipei" > /etc/timezone && \
-     dpkg-reconfigure -f noninteractive tzdata
-	
+	echo "Asia/Taipei" > /etc/timezone && \
+	dpkg-reconfigure -f noninteractive tzdata
+
+# Set default locale
+ENV	LANG en_US.UTF-8
+RUN \
+ 	locale-gen en_US.UTF-8 && \
+ 	locale-gen zh_TW && \
+ 	locale-gen zh_TW.UTF-8 && \
+ 	locale-gen zh_CN.UTF-8 && \
+ 	update-locale LANG=en_US.UTF-8
+	 
 # Environment variables
 RUN \
-     echo " " >> /etc/bash.bashrc && \
-     echo "#_____________________" >> /etc/bash.bashrc && \
-     echo "force_color_prompt=yes" >> /etc/bash.bashrc && \
-     echo "alias cls='clear'" >> /etc/bash.bashrc && \
-     echo "export TERM=linux" >> /etc/bash.bashrc 	
+	echo " " >> /etc/bash.bashrc && \
+	echo "#_____________________" >> /etc/bash.bashrc && \
+	echo "force_color_prompt=yes" >> /etc/bash.bashrc && \
+	echo "alias cls='clear'" >> /etc/bash.bashrc && \
+	echo "alias ll='ls -alhF'" >> /etc/bash.bashrc && \	 
+	echo "export TERM=linux" >> /etc/bash.bashrc 	
 
 # Upgrade and clean up
 RUN \
-     apt-get dist-upgrade -y && \
-     apt-get autoremove -y && \
-     apt-get autoclean -y && \
-     apt-get clean -y && \
-     rm -rf /var/lib/apt/lists/*
+	apt-get dist-upgrade -y && \
+	apt-get autoremove -y && \
+	apt-get autoclean -y && \
+	apt-get clean -y && \
+	rm -rf /var/lib/apt/lists/*
