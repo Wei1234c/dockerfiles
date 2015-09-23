@@ -18,4 +18,3 @@ cd ${HADOOP_HOME}/bin
 
 ./hadoop fs -ls output
 ./hadoop fs -cat output/part*
-

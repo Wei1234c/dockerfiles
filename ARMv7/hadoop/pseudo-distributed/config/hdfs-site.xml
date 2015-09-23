@@ -1,6 +1,11 @@
 <configuration>
-    <property>
-        <name>dfs.replication</name>
-        <value>1</value>
-    </property>
+	<property>
+		<name>dfs.replication</name>
+		<value>1</value>
+	</property>
+	<property> 
+		<name>dfs.block.size<name> 
+		<value>67108864<value> 
+		<description>Block size<description> 
+	<property>
 </configuration>

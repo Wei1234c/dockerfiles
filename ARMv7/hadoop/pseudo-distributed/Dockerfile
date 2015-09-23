@@ -92,7 +92,7 @@ RUN \
      env && \
      sed -i "/^export JAVA_HOME/ s:.*:export JAVA_HOME=${JAVA_HOME}\nexport HADOOP_HOME=/usr/local/hadoop\nexport HADOOP_PREFIX=${HADOOP_HOME}\n:" ${HADOOP_CONF_DIR}/hadoop-env.sh && \
      sed -i "/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop:" ${HADOOP_CONF_DIR}/hadoop-env.sh && \
-	 echo "export HADOOP_HEAPSIZE=512" >> ${HADOOP_CONF_DIR}/hadoop-env.sh
+	 echo "export HADOOP_HEAPSIZE=768" >> ${HADOOP_CONF_DIR}/hadoop-env.sh
      
 # pseudo distributed
 ADD  config/hdfs-site.xml ${HADOOP_CONF_DIR}/hdfs-site.xml
