@@ -18,3 +18,9 @@ cd ${HADOOP_HOME}/bin
 
 ./hadoop fs -ls output
 ./hadoop fs -cat output/part*
+
+
+# ${HADOOP_HOME}/sbin/stop-yarn.sh
+# ${HADOOP_HOME}/sbin/stop-dfs.sh
+
+
