@@ -29,13 +29,13 @@ MAINTAINER Wei Lin
 ENV TERM linux 
 
 USER root
-RUN echo 'root:Wei1144' | chpasswd	 
+RUN echo 'root:raspberry' | chpasswd	 
 
 
 # ADD USER PI __________________________
 RUN \
 	useradd -G adm,sudo,users -s /bin/bash -m pi && \
-	echo 'pi:Wei1144' | chpasswd
+	echo 'pi:raspberry' | chpasswd
 
 
 
