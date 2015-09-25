@@ -8,7 +8,6 @@
 # to build image: docker build -t hadoop_distributed .
 # to test: docker run -dit -P --name=hadoop_distributed hadoop_distributed
 
-# Pull base image.
 FROM armv7/armhf-ubuntu:14.04
 
 MAINTAINER Wei Lin
@@ -81,12 +80,7 @@ RUN \
    env && \
    sed -i "/^export JAVA_HOME/ s:.*:export JAVA_HOME=${JAVA_HOME}\nexport HADOOP_HOME=/usr/local/hadoop\nexport HADOOP_PREFIX=${HADOOP_HOME}\n:" ${HADOOP_CONF_DIR}/hadoop-env.sh && \
    sed -i "/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop:" ${HADOOP_CONF_DIR}/hadoop-env.sh && \
-	 echo "export HADOOP_HEAPSIZE=256" >> ${HADOOP_CONF_DIR}/hadoop-env.sh
-   
-# Prepare input
-RUN \	 
-   mkdir ${HADOOP_HOME}/input && \
-   cp ${HADOOP_CONF_DIR}/*.xml ${HADOOP_INPUT_DIR}
+	 echo "export HADOOP_HEAPSIZE=512" >> ${HADOOP_CONF_DIR}/hadoop-env.sh
 
 # Copy configuration files.
 ADD config/hdfs-site.xml ${HADOOP_CONF_DIR}/hdfs-site.xml
@@ -94,6 +88,11 @@ ADD config/mapred-site.xml ${HADOOP_CONF_DIR}/mapred-site.xml
 ADD config/yarn-site.xml ${HADOOP_CONF_DIR}/yarn-site.xml
 ADD config/core-site.xml.template ${HADOOP_CONF_DIR}/core-site.xml.template
 RUN sed s/HOSTNAME/master/ ${HADOOP_CONF_DIR}/core-site.xml.template > ${HADOOP_CONF_DIR}/core-site.xml 
+
+# Prepare input
+RUN \	 
+   mkdir ${HADOOP_HOME}/input && \
+   cp ${HADOOP_CONF_DIR}/*.xml ${HADOOP_INPUT_DIR}
 
 # Set master and slaves names
 RUN \

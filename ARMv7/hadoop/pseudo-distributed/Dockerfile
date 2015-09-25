@@ -6,7 +6,7 @@
 # by: Wei Lin
 # date: 2015/9/6
 # to build image: 
-#       cd /path/to/the/dockerfile
+# cd /path/to/the/dockerfile
 #		docker build -t hadoop_pseudo-distributed .
 # to start container: 
 #		docker run -dit -P --name=hadoop hadoop_pseudo-distributed
@@ -30,14 +30,14 @@ USER root
 
 # Install Java _______________________________________________________________________________________________
 RUN \
-     echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-     apt-get update && \
-     apt-get install -y software-properties-common && \
-     add-apt-repository -y ppa:webupd8team/java && \
-     apt-get update && \
-     apt-get install -y oracle-java8-installer && \
-     apt-get remove -y software-properties-common && \
-     rm -rf /var/cache/oracle-jdk8-installer
+	echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+	apt-get update && \
+	apt-get install -y software-properties-common && \
+	add-apt-repository -y ppa:webupd8team/java && \
+	apt-get update && \
+	apt-get install -y oracle-java8-installer && \
+	apt-get remove -y software-properties-common && \
+	rm -rf /var/cache/oracle-jdk8-installer
 	 
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 ENV PATH ${PATH}:${JAVA_HOME}/bin
@@ -46,17 +46,17 @@ ENV PATH ${PATH}:${JAVA_HOME}/bin
 
 # Install SSH ________________________________________________________________________________________________
 RUN \ 
-     apt-get install -y openssh-server openssh-client rsync && \
-     mkdir /var/run/sshd
+	apt-get install -y openssh-server openssh-client rsync && \
+	mkdir /var/run/sshd
 	 
 # SSH login fix. Otherwise user is kicked off after login
 RUN \
-     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+	sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
 # passwordless ssh
 RUN \
-     ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa && \
-     cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+	ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa && \
+	cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 
 	 
 
@@ -77,49 +77,49 @@ ENV YARN_CONF_DIR ${HADOOP_CONF_DIR}
 	 
 # Download script and jars from remote.
 RUN \
-     apt-get install -y curl && \
-     curl -s http://apache.stu.edu.tw/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar -zx -C /usr/local/ && \
-     cd /usr/local && \
-     ls -alF && \
-     ln -s ./hadoop-${HADOOP_VERSION} hadoop && \
-     apt-get remove -y curl
+	apt-get install -y curl && \
+	curl -s http://apache.stu.edu.tw/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar -zx -C /usr/local/ && \
+	cd /usr/local && \
+	ls -alF && \
+	ln -s ./hadoop-${HADOOP_VERSION} hadoop && \
+	apt-get remove -y curl
 
 # Discard native code
-RUN  rm -rf ${HADOOP_HOME}/lib/native
+RUN rm -rf ${HADOOP_HOME}/lib/native
 
 # Modify hadoop-env.sh	 
 RUN \
-     env && \
-     sed -i "/^export JAVA_HOME/ s:.*:export JAVA_HOME=${JAVA_HOME}\nexport HADOOP_HOME=/usr/local/hadoop\nexport HADOOP_PREFIX=${HADOOP_HOME}\n:" ${HADOOP_CONF_DIR}/hadoop-env.sh && \
-     sed -i "/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop:" ${HADOOP_CONF_DIR}/hadoop-env.sh && \
-	 echo "export HADOOP_HEAPSIZE=768" >> ${HADOOP_CONF_DIR}/hadoop-env.sh
-     
+	env && \
+	sed -i "/^export JAVA_HOME/ s:.*:export JAVA_HOME=${JAVA_HOME}\nexport HADOOP_HOME=/usr/local/hadoop\nexport HADOOP_PREFIX=${HADOOP_HOME}\n:" ${HADOOP_CONF_DIR}/hadoop-env.sh && \
+	sed -i "/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop:" ${HADOOP_CONF_DIR}/hadoop-env.sh && \
+	echo "export HADOOP_HEAPSIZE=768" >> ${HADOOP_CONF_DIR}/hadoop-env.sh
+ 
 # pseudo distributed
-ADD  config/hdfs-site.xml ${HADOOP_CONF_DIR}/hdfs-site.xml
-ADD  config/mapred-site.xml ${HADOOP_CONF_DIR}/mapred-site.xml
-ADD  config/yarn-site.xml ${HADOOP_CONF_DIR}/yarn-site.xml
-ADD  config/core-site.xml.template ${HADOOP_CONF_DIR}/core-site.xml.template
-RUN  sed s/HOSTNAME/localhost/ ${HADOOP_CONF_DIR}/core-site.xml.template > ${HADOOP_CONF_DIR}/core-site.xml  
+ADD config/hdfs-site.xml ${HADOOP_CONF_DIR}/hdfs-site.xml
+ADD config/mapred-site.xml ${HADOOP_CONF_DIR}/mapred-site.xml
+ADD config/yarn-site.xml ${HADOOP_CONF_DIR}/yarn-site.xml
+ADD config/core-site.xml.template ${HADOOP_CONF_DIR}/core-site.xml.template
+RUN sed s/HOSTNAME/localhost/ ${HADOOP_CONF_DIR}/core-site.xml.template > ${HADOOP_CONF_DIR}/core-site.xml 
 
 # Prepare input
 RUN \	 
-     mkdir ${HADOOP_HOME}/input && \
-     cp ${HADOOP_CONF_DIR}/*.xml ${HADOOP_INPUT_DIR}
+	mkdir ${HADOOP_HOME}/input && \
+	cp ${HADOOP_CONF_DIR}/*.xml ${HADOOP_INPUT_DIR}
 
 # Format namenode
-RUN  ${HADOOP_HOME}/bin/hdfs namenode -format
+RUN ${HADOOP_HOME}/bin/hdfs namenode -format
 
 # Config SSH port and security.
-ADD  config/ssh_config /root/.ssh/config
+ADD config/ssh_config /root/.ssh/config
 RUN \
-     chmod 600 /root/.ssh/config && \
-     chown root:root /root/.ssh/config
+	chmod 600 /root/.ssh/config && \
+	chown root:root /root/.ssh/config
 	 
 # fix the 254 error code
 RUN \
-     sed  -i "/^[^#]*UsePAM/ s/.*/#&/" /etc/ssh/sshd_config && \
-     echo "UsePAM no" >> /etc/ssh/sshd_config && \
-     echo "Port 2122" >> /etc/ssh/sshd_config
+	sed -i "/^[^#]*UsePAM/ s/.*/#&/" /etc/ssh/sshd_config && \
+	echo "UsePAM no" >> /etc/ssh/sshd_config && \
+	echo "Port 2122" >> /etc/ssh/sshd_config
 
 # # installing supervisord
 # RUN yum install -y python-setuptools
@@ -130,19 +130,19 @@ RUN \
 # ADD config/supervisord.conf /etc/supervisord.conf
 
 # Add bootstrap.sh
-ADD  config/bootstrap.sh /etc/bootstrap.sh
+ADD config/bootstrap.sh /etc/bootstrap.sh
 RUN \
-     chown root:root /etc/bootstrap.sh && \
-     chmod 700 /etc/bootstrap.sh
+	chown root:root /etc/bootstrap.sh && \
+	chmod 700 /etc/bootstrap.sh
 
 # export BOOTSTRAP="/etc/bootstrap.sh"
-ENV  BOOTSTRAP /etc/bootstrap.sh
+ENV BOOTSTRAP /etc/bootstrap.sh
 
 # workingaround docker.io build error
 RUN \
-     ls -la ${HADOOP_CONF_DIR}/*-env.sh && \
-     chmod +x ${HADOOP_CONF_DIR}/*-env.sh && \
-     ls -la ${HADOOP_CONF_DIR}/*-env.sh
+	ls -la ${HADOOP_CONF_DIR}/*-env.sh && \
+	chmod +x ${HADOOP_CONF_DIR}/*-env.sh && \
+	ls -la ${HADOOP_CONF_DIR}/*-env.sh
 
 #
 RUN service ssh start && ${HADOOP_CONF_DIR}/hadoop-env.sh && ${HADOOP_HOME}/sbin/start-dfs.sh && ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /user/root

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+HADOOP_HOME=/usr/local/hadoop
+HADOOP_INPUT_DIR=${HADOOP_HOME}/input
+HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop
+
+
 # Start containers
 docker run -dit -P --name=master -v /data:/data hadoop_full-distributed
 docker run -dit -P --name=slave1 -v /data:/data hadoop_full-distributed
@@ -37,8 +42,7 @@ docker exec slave2 ping -c 1 master
 
 
 
-# format namenode
-HADOOP_HOME=/usr/local/hadoop
+# format namenode 
 docker exec master ${HADOOP_HOME}/bin/hdfs namenode -format
 
 # start sshd
@@ -46,11 +50,28 @@ docker exec master service ssh start
 docker exec slave1 service ssh start
 docker exec slave2 service ssh start
 
+
+
+# copy config
+echo "docker exec master ${HADOOP_CONF_DIR}/hadoop-env.sh"
+docker exec master /bin/sh -c "${HADOOP_CONF_DIR}/hadoop-env.sh"
+
+echo "docker exec master ${HADOOP_HOME}/sbin/start-dfs.sh"
+docker exec master ${HADOOP_HOME}/sbin/start-dfs.sh
+
+echo "docker exec master ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /user/root"
+docker exec master ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /user/root
+
+echo "docker exec master ${HADOOP_HOME}/bin/hdfs dfs -put ${HADOOP_CONF_DIR} input"
+docker exec master ${HADOOP_HOME}/bin/hdfs dfs -put ${HADOOP_CONF_DIR} input
+
+
+
 # Startup cluster
-docker exec master /etc/bootstrap.sh
+# docker exec master /etc/bootstrap.sh
 # docker exec master ${HADOOP_HOME}/sbin/start-all.sh
 # docker exec master ${HADOOP_HOME}/sbin/start-dfs.sh
-# docker exec master ${HADOOP_HOME}/sbin/start-yarn.sh
+docker exec master ${HADOOP_HOME}/sbin/start-yarn.sh
 
 
 
