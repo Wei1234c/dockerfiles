@@ -36,6 +36,21 @@ dhadoopcluster(){
 	/dockerfiles/ARMv7/hadoop/cluster/start.sh
 }
 
+dhbase(){
+	echo "Starting Hadoop _________________________________________________"
+	HADOOP_HOME=/usr/local/hadoop
+	docker run -dit -P -v /data:/data --name=hbase hbase /bin/bash
+	docker exec hbase /etc/bootstrap.sh
+	#docker exec hbase ${HADOOP_HOME}/bin/hadoop dfsadmin -safemode wait
+	#docker exec hbase ${HADOOP_HOME}/bin/hdfs dfs -mkdir /hbase
+
+	echo ""
+	echo "Starting HBase _________________________________________________"
+	HBASE_HOME=/usr/local/hbase
+	docker exec hbase ${HBASE_HOME}/bin/start-hbase.sh
+	docker attach hbase
+}
+
 drmc(){
 	docker stop $(docker ps -q 2>/dev/null) 2>/dev/null
 	docker rm $(docker ps -aq 2>/dev/null) 2>/dev/null

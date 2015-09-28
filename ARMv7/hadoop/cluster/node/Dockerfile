@@ -68,8 +68,8 @@ RUN \
    apt-get install -y curl && \
    curl -s http://apache.stu.edu.tw/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar -zx -C /usr/local/ && \
    cd /usr/local && \
-   ls -alF && \
    ln -s ./hadoop-${HADOOP_VERSION} hadoop && \
+   ls -alF && \
    apt-get remove -y curl
 
 # Discard native code

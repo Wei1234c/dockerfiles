@@ -74,14 +74,16 @@ ENV HADOOP_MAPRED_HOME ${HADOOP_HOME}
 ENV HADOOP_YARN_HOME ${HADOOP_HOME}
 ENV HADOOP_CLASSPATH=${JAVA_HOME}/lib/tools.jar
 ENV YARN_CONF_DIR ${HADOOP_CONF_DIR}
+
+ENV PATH ${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin
 	 
 # Download script and jars from remote.
 RUN \
 	apt-get install -y curl && \
 	curl -s http://apache.stu.edu.tw/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar -zx -C /usr/local/ && \
 	cd /usr/local && \
-	ls -alF && \
 	ln -s ./hadoop-${HADOOP_VERSION} hadoop && \
+	ls -alF && \
 	apt-get remove -y curl
 
 # Discard native code
