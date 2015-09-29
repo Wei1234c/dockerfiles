@@ -99,17 +99,3 @@ RUN \
 	apt-get autoclean -y && \
 	apt-get clean -y && \
 	rm -rf /var/lib/apt/lists/*
-
-	
-
-# # HBase id
-# RUN \	
-	# touch /tmp/hbaseid && \
-	# echo 0 > /tmp/hbaseid && \
-	# service ssh start && \
-	# ${HADOOP_CONF_DIR}/hadoop-env.sh && \
-	# ${HADOOP_HOME}/sbin/start-dfs.sh && \
-	# ${HADOOP_HOME}/bin/hdfs dfsadmin -safemode wait && \
-	# ${HADOOP_HOME}/bin/hadoop fs -copyFromLocal /tmp/hbaseid /hbase/ && \
-	# ${HADOOP_HOME}/bin/hadoop fs -cat /hbase/hbaseid	
-

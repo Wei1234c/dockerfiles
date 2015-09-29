@@ -41,14 +41,25 @@ dhbase(){
 	HADOOP_HOME=/usr/local/hadoop
 	docker run -dit -P -v /data:/data --name=hbase hbase /bin/bash
 	docker exec hbase /etc/bootstrap.sh
-	#docker exec hbase ${HADOOP_HOME}/bin/hadoop dfsadmin -safemode wait
-	#docker exec hbase ${HADOOP_HOME}/bin/hdfs dfs -mkdir /hbase
 
 	echo ""
-	echo "Starting HBase _________________________________________________"
+	echo "Starting HBase __________________________________________________"
 	HBASE_HOME=/usr/local/hbase
 	docker exec hbase ${HBASE_HOME}/bin/start-hbase.sh
 	docker attach hbase
+}
+
+dhive(){
+	echo "Starting Hadoop _________________________________________________"
+	HADOOP_HOME=/usr/local/hadoop
+	docker run -dit -P -v /data:/data --name=hive hive /bin/bash
+	docker exec hive /etc/bootstrap.sh
+
+	echo ""
+	echo "Starting Hive ___________________________________________________"
+	HIVE_HOME=/usr/local/hive
+	docker exec hive ${HIVE_HOME}/bin/hive
+	docker attach hive
 }
 
 drmc(){
