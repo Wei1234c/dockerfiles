@@ -6,9 +6,9 @@ HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop
 
 
 # Start containers
-docker run -dit -P --name=master -v /data:/data hadoop_full-distributed
-docker run -dit -P --name=slave1 -v /data:/data hadoop_full-distributed
-docker run -dit -P --name=slave2 -v /data:/data hadoop_full-distributed
+docker run -dit -P --name=master -v /data:/data wei1234c/hadoop_full-distributed_armv7
+docker run -dit -P --name=slave1 -v /data:/data wei1234c/hadoop_full-distributed_armv7
+docker run -dit -P --name=slave2 -v /data:/data wei1234c/hadoop_full-distributed_armv7
 
 # Get containers' IP addresses
 master_ip="$(docker inspect -f {{.NetworkSettings.IPAddress}} master)"

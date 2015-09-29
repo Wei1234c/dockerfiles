@@ -5,8 +5,7 @@
 # modified by: Wei Lin
 # date: 2015/9/3
 
-# Pull base image.
-FROM python
+FROM wei1234c/python_armv7
 
 MAINTAINER Wei Lin
 

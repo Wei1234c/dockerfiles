@@ -1,7 +1,7 @@
 # by: Wei Lin
 # date: 2015/9/6 
 
-FROM hadoop_pseudo-distributed
+FROM wei1234c/hadoop_pseudo-distributed_armv7
 
 MAINTAINER Wei Lin
 

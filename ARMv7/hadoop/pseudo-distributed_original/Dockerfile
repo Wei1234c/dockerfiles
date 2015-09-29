@@ -8,9 +8,8 @@
 # to build image: docker build -t hadoop_pseudo-distributed .
 # to test: docker run -d -P --name=hadoop_pseudo hadoop_pseudo-distributed
 
-# Pull base image.
+.
 FROM armv7/armhf-ubuntu:14.04
-# FROM java8_sshd_root-login
 
 MAINTAINER Wei Lin
 
