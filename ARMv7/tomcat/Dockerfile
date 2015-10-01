@@ -3,7 +3,7 @@
 # date: 2015/9/4
 
 # Pull base image.
-FROM armv7/armhf-ubuntu:14.04
+FROM wei1234c/java_armv7
 
 MAINTAINER Wei Lin
 
@@ -11,23 +11,7 @@ ENV TERM linux
 
 
 # Install Java _______________________________________________________________________________________________
-RUN \
-     echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-     apt-get update && \
-     apt-get install -y software-properties-common && \
-     add-apt-repository -y ppa:webupd8team/java && \
-     apt-get update && \
-     apt-get install -y oracle-java8-installer && \
-     apt-get remove -y software-properties-common && \
-     rm -rf /var/cache/oracle-jdk8-installer
-	 
-# Define commonly used JAVA_HOME variable.
-# export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
-
-# Append PATH
-# export PATH=${PATH}:${JAVA_HOME}/bin
-# echo ${PATH}
 ENV PATH ${PATH}:${JAVA_HOME}/bin
 
 
@@ -77,19 +61,6 @@ CMD ["catalina.sh", "run"]
 
 
 # Misc. ______________________________________________________________________________________________________
-
-# Set time zone
-RUN \
-     echo "Asia/Taipei" > /etc/timezone && \
-     dpkg-reconfigure -f noninteractive tzdata
-	
-# Environment variables
-RUN \
-     echo " " >> /etc/bash.bashrc && \
-     echo "#_____________________" >> /etc/bash.bashrc && \
-     echo "force_color_prompt=yes" >> /etc/bash.bashrc && \
-     echo "alias cls='clear'" >> /etc/bash.bashrc && \
-     echo "export TERM=linux" >> /etc/bash.bashrc 	
 
 # Upgrade and clean up
 RUN \

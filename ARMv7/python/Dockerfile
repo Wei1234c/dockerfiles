@@ -7,7 +7,7 @@
 # date: 2015/9/3
 
 # Pull base image.
-FROM armv7/armhf-ubuntu:14.04
+FROM wei1234c/ubuntu_armv7
 
 MAINTAINER Wei Lin
 
@@ -28,19 +28,6 @@ CMD ["bash"]
 
 
 # Misc. ______________________________________________________________________________________________________
-
-# Set time zone
-RUN \
-     echo "Asia/Taipei" > /etc/timezone && \
-     dpkg-reconfigure -f noninteractive tzdata
-	
-# Environment variables
-RUN \
-     echo " " >> /etc/bash.bashrc && \
-     echo "#_____________________" >> /etc/bash.bashrc && \
-     echo "force_color_prompt=yes" >> /etc/bash.bashrc && \
-     echo "alias cls='clear'" >> /etc/bash.bashrc && \
-     echo "export TERM=linux" >> /etc/bash.bashrc 	
 
 # Upgrade and clean up
 RUN \

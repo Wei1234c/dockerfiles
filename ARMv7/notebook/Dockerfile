@@ -2,7 +2,7 @@
 # Another Docker container should inherit with `FROM jupyter/notebook`
 # to run actual services.
 
-FROM armv7/armhf-ubuntu:14.04
+FROM wei1234c/ubuntu_armv7
 
 MAINTAINER Project Jupyter <jupyter@googlegroups.com>
 
@@ -56,3 +56,16 @@ RUN pip3 install --pre -e .
 # install kernels
 RUN python2 -m ipykernel.kernelspec
 RUN python3 -m ipykernel.kernelspec
+
+
+
+
+# Misc. ______________________________________________________________________________________________________
+
+# Upgrade and clean up
+RUN \
+     apt-get dist-upgrade -y && \
+     apt-get autoremove -y && \
+     apt-get autoclean -y && \
+     apt-get clean -y && \
+     rm -rf /var/lib/apt/lists/*

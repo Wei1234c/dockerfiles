@@ -22,7 +22,7 @@
 # }
 # vncpassword: 12345678
 
-FROM armv7/armhf-ubuntu:14.04
+FROM wei1234c/ubuntu_armv7
 
 MAINTAINER Wei Lin
 
@@ -103,29 +103,6 @@ CMD	["bash"]
 
 
 # Misc. ______________________________________________________________________________________________________
-
-# Set time zone
-RUN \
-	echo "Asia/Taipei" > /etc/timezone && \
-	dpkg-reconfigure -f noninteractive tzdata
-
-# Set default locale
-ENV	LANG en_US.UTF-8
-RUN \
- 	locale-gen en_US.UTF-8 && \
- 	locale-gen zh_TW && \
- 	locale-gen zh_TW.UTF-8 && \
- 	locale-gen zh_CN.UTF-8 && \
- 	update-locale LANG=en_US.UTF-8
-	 
-# Environment variables
-RUN \
-	echo " " >> /etc/bash.bashrc && \
-	echo "#_____________________" >> /etc/bash.bashrc && \
-	echo "force_color_prompt=yes" >> /etc/bash.bashrc && \
-	echo "alias cls='clear'" >> /etc/bash.bashrc && \
-	echo "alias ll='ls -alhF'" >> /etc/bash.bashrc && \	 
-	echo "export TERM=linux" >> /etc/bash.bashrc 	
 
 # Upgrade and clean up
 RUN \

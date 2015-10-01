@@ -2,8 +2,7 @@
 # modified by: Wei Lin
 # date: 2015/9/4
 
-# Pull base image.
-FROM armv7/armhf-ubuntu:14.04
+FROM wei1234c/ubuntu_armv7
 
 MAINTAINER Wei Lin
 
@@ -78,24 +77,7 @@ RUN echo "#!/bin/bash" > /usr/local/bin/httpd-foreground && \
     echo " " >> /usr/local/bin/httpd-foreground && \
     echo "exec httpd -DFOREGROUND" >> /usr/local/bin/httpd-foreground && \
     chmod +x /usr/local/bin/httpd-foreground
-    
-# Upgrade and clean up
-RUN apt-get dist-upgrade -y && \
-    apt-get autoremove -y && \
-    apt-get autoclean -y && \
-    apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/*
-
-# 設定時區
-RUN echo "Asia/Taipei" > /etc/timezone && \
-    dpkg-reconfigure -f noninteractive tzdata
-    
-# Environment variables
-RUN echo " " >> /etc/bash.bashrc && \
-    echo "#_____________________" >> /etc/bash.bashrc && \
-    echo "force_color_prompt=yes" >> /etc/bash.bashrc && \
-    echo "alias cls='clear'" >> /etc/bash.bashrc && \
-    echo "export TERM=linux" >> /etc/bash.bashrc
+ 
 
 EXPOSE 80
 
@@ -105,19 +87,6 @@ CMD ["httpd-foreground"]
 
 
 # Misc. ______________________________________________________________________________________________________
-
-# Set time zone
-RUN \
-     echo "Asia/Taipei" > /etc/timezone && \
-     dpkg-reconfigure -f noninteractive tzdata
-	
-# Environment variables
-RUN \
-     echo " " >> /etc/bash.bashrc && \
-     echo "#_____________________" >> /etc/bash.bashrc && \
-     echo "force_color_prompt=yes" >> /etc/bash.bashrc && \
-     echo "alias cls='clear'" >> /etc/bash.bashrc && \
-     echo "export TERM=linux" >> /etc/bash.bashrc 	
 
 # Upgrade and clean up
 RUN \
