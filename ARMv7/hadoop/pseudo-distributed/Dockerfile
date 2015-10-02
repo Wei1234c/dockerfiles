@@ -61,6 +61,7 @@ ENV PATH ${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin
 	 
 # Download script and jars from remote.
 RUN \
+	apt-get update && \
 	apt-get install -y curl && \
 	curl -s http://apache.stu.edu.tw/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar -zx -C /usr/local/ && \
 	cd /usr/local && \

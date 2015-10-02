@@ -38,8 +38,7 @@ RUN \
 EXPOSE	22
 
 # Define default command.
-CMD	["service ssh start"]
-
+CMD	["/usr/sbin/sshd", "-D"]
 
 
 

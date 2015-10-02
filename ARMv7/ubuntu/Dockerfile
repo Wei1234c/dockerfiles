@@ -44,8 +44,11 @@ RUN \
 # Upgrade and clean up
 RUN \
 	apt-get update && \
+	apt-get install -y htop && \
 	apt-get dist-upgrade -y && \
 	apt-get autoremove -y && \
 	apt-get autoclean -y && \
 	apt-get clean -y && \
 	rm -rf /var/lib/apt/lists/*
+
+CMD	["bash"]

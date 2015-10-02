@@ -22,7 +22,7 @@
 # }
 # vncpassword: 12345678
 
-FROM wei1234c/ubuntu_armv7
+FROM wei1234c/sshd_armv7
 
 MAINTAINER Wei Lin
 
@@ -33,32 +33,19 @@ RUN echo 'root:raspberry' | chpasswd
 
 
 # ADD USER PI __________________________
-RUN \
-	useradd -G adm,sudo,users -s /bin/bash -m pi && \
-	echo 'pi:raspberry' | chpasswd
-
+#RUN \
+#	useradd -G adm,sudo,users -s /bin/bash -m pi && \
+#	echo 'pi:raspberry' | chpasswd
 
 
 # Install SSH ________________________________________________________________________________________________
-RUN \
-	apt-get update && \
-	apt-get install -y openssh-server && \
-	mkdir /var/run/sshd
-	
-
-# root password and login permission / use user pi instead
-# SSH login fix. Otherwise user is kicked off after login
-RUN \
-	service ssh stop && \
-	sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-	sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-
-# RUN	service ssh restart
-
+# root password and login permission
+RUN	sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
  
 # Install LXDE VNC XRDP Chrome __________________________
 RUN \
+	apt-get update && \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	lubuntu-desktop \
 	tightvncserver \
@@ -84,10 +71,6 @@ RUN \
 	mkdir /root/.vnc && \
 	echo "12345678" | vncpasswd -f > /root/.vnc/passwd && \
 	chmod 600 /root/.vnc/passwd
-
-# RUN	vncserver
-
-
 
  
 # Define working directory.
