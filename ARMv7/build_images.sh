@@ -25,8 +25,6 @@ docker build -t wei1234c/hadoop_full-distributed_armv7 /dockerfiles/ARMv7/hadoop
 
 
 docker tag wei1234c/ubuntu_armv7 ubuntu:latest
-drmc
-dcleanup
 
 
 docker push wei1234c/ubuntu_armv7
@@ -50,5 +48,5 @@ docker push wei1234c/hbase_armv7
 docker push wei1234c/hive_armv7
 docker push wei1234c/hadoop_full-distributed_armv7
 
-drmc
-dcleanup
+call drmc
+call dcleanup
