@@ -18,6 +18,7 @@
 # 	check the output:
 #		docker exec hadoop /usr/local/hadoop/bin/hdfs dfs -cat output/*
 
+
 FROM wei1234c/java_sshd_armv7
 
 MAINTAINER Wei Lin
