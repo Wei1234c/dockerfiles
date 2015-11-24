@@ -28,11 +28,25 @@ ENV	CGMiner_HOME /usr/local/cgminer
 ENV	LIBCURL_CFLAGS ' -I/usr/include/curl'
 
 RUN	apt-get update && \
-	apt-get install -y git wget curl && \
-	apt-get install -y libusb-1.0-0-dev libusb-1.0-0 libusb-dev \
-		libcurl4-openssl-dev libcurl4-gnutls-dev libncurses5-dev libudev-dev  \
-		screen libtool autoconf automake pkg-config \
-		libjansson-dev libtool pkg-config
+	apt-get install -y git wget curl
+
+RUN	apt-get install -y libgusb2 libgusb-dev
+
+RUN	apt-get install -y libcurl4-openssl-dev
+# RUN	apt-get install -y libcurl4-gnutls-dev 
+RUN	apt-get install -y libncurses5-dev 
+RUN	apt-get install -y libudev-dev
+
+# RUN	apt-get install -y libcurl3 libcurl3-gnutls libcurl3-nss libcurl4-gnutls-dev libcurl4-nss-dev libcurl4-openssl-dev
+
+RUN	apt-get install -y screen libtool autoconf automake pkg-config
+
+RUN	apt-get install -y libjansson-dev  
+
+#RUN	apt-get install -y libusb-1.0-0-dev libusb-1.0-0 libusb-dev \
+#		libcurl4-openssl-dev libcurl4-gnutls-dev libncurses5-dev libudev-dev  \
+#		screen libtool autoconf automake pkg-config \
+#		libjansson-dev libtool pkg-config
 
 RUN	apt-get install -y --reinstall make
 
@@ -42,16 +56,6 @@ RUN	apt-get dist-upgrade -y && \
 	ls -alF
 
 
-RUN	cd ${CGMiner_HOME} && \
-	./autogen.sh
-
-RUN	./configure --enable-bmsc
-# RUN	./configure --enable-cpumining
-
-
-RUN	pwd && \
-	make && \
-	cd 
 
 # ENV PATH ${PATH}:${CGMiner_HOME}
 
@@ -79,5 +83,22 @@ RUN \
 	apt-get dist-upgrade -y && \
 	apt-get autoremove -y && \
 	apt-get autoclean -y && \
-	apt-get clean -y && \
-	rm -rf /var/lib/apt/lists/*
+	apt-get clean -y
+# && \
+#	rm -rf /var/lib/apt/lists/*
+
+RUN	apt-get install -y build-essential
+
+RUN	cd ${CGMiner_HOME}
+
+RUN	git checkout v2.9.6
+
+RUN	./autogen.sh
+
+# RUN	./configure   --disable-libcurl --enable-cpumining
+
+
+#RUN	pwd && \
+#	make && \
+#	cd 
+
