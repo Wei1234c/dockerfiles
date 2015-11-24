@@ -91,14 +91,15 @@ RUN	apt-get install -y build-essential
 
 RUN	cd ${CGMiner_HOME}
 
+WORKDIR		${CGMiner_HOME}
+
+RUN	pwd
+
 RUN	git checkout v2.9.6
 
 RUN	./autogen.sh
 
-# RUN	./configure   --disable-libcurl --enable-cpumining
+RUN	./configure   --disable-libcurl --enable-cpumining
 
 
-#RUN	pwd && \
-#	make && \
-#	cd 
-
+RUN	make
