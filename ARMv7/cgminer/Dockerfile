@@ -22,42 +22,41 @@ RUN \
 
 
 # Install CGMiner ____________________________________________________________________________________________
+# Environmant variables
 ENV	CGMiner_VERSION_MAIN 4.9
 ENV	CGMiner_VERSION 4.9.1
 ENV	CGMiner_HOME /usr/local/cgminer
 ENV	LIBCURL_CFLAGS ' -I/usr/include/curl'
 
+# Install related packages
 RUN	apt-get update && \
-	apt-get install -y git wget curl
+	apt-get install -y git wget curl \
+			libgusb2 libgusb-dev \
+			libcurl4-openssl-dev \
+			libncurses5-dev \
+			libudev-dev && \
+	apt-get install -y screen libtool autoconf automake pkg-config build-essential \ 
+			libjansson-dev  && \
+	apt-get install -y --reinstall make && \
+	apt-get dist-upgrade -y
 
-RUN	apt-get install -y libgusb2 libgusb-dev
-
-RUN	apt-get install -y libcurl4-openssl-dev
-# RUN	apt-get install -y libcurl4-gnutls-dev 
-RUN	apt-get install -y libncurses5-dev 
-RUN	apt-get install -y libudev-dev
-
-# RUN	apt-get install -y libcurl3 libcurl3-gnutls libcurl3-nss libcurl4-gnutls-dev libcurl4-nss-dev libcurl4-openssl-dev
-
-RUN	apt-get install -y screen libtool autoconf automake pkg-config
-
-RUN	apt-get install -y libjansson-dev  
-
-#RUN	apt-get install -y libusb-1.0-0-dev libusb-1.0-0 libusb-dev \
-#		libcurl4-openssl-dev libcurl4-gnutls-dev libncurses5-dev libudev-dev  \
-#		screen libtool autoconf automake pkg-config \
-#		libjansson-dev libtool pkg-config
-
-RUN	apt-get install -y --reinstall make
-
-RUN	apt-get dist-upgrade -y && \
-	cd /usr/local && \
-	git clone https://github.com/bitmaintech/cgminer && \	
+# Clone CGMiner source code
+RUN	cd /usr/local && \
+	git clone https://github.com/bitmaintech/cgminer && \
+	cd ${CGMiner_HOME} && \
+	git checkout v2.9.6 && \	
 	ls -alF
 
+# Compile source
+WORKDIR	${CGMiner_HOME}
 
+RUN	./autogen.sh && \
+	./configure --enable-cpumining && \
+	make
 
-# ENV PATH ${PATH}:${CGMiner_HOME}
+#RUN	./autogen.sh && \
+#	./configure   --disable-libcurl --enable-cpumining && \
+#	make
 
 
 # Boot up
@@ -83,23 +82,7 @@ RUN \
 	apt-get dist-upgrade -y && \
 	apt-get autoremove -y && \
 	apt-get autoclean -y && \
-	apt-get clean -y
-# && \
-#	rm -rf /var/lib/apt/lists/*
+	apt-get clean -y 
 
-RUN	apt-get install -y build-essential
-
-RUN	cd ${CGMiner_HOME}
-
-WORKDIR		${CGMiner_HOME}
-
-RUN	pwd
-
-RUN	git checkout v2.9.6
-
-RUN	./autogen.sh
-
-RUN	./configure   --disable-libcurl --enable-cpumining
-
-
-RUN	make
+# && rm -rf /var/lib/apt/lists/*
+ 
