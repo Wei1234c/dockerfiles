@@ -1,0 +1,83 @@
+# PocketMine dockerfile for armv7
+# modified by: Wei Lin
+# date: 2015/11/28
+
+FROM	wei1234c/ubuntu_armv7
+# wei1234c/php_armv7:5
+# resin/rpi-raspbian
+# wei1234c/ubuntu_armv7
+
+MAINTAINER	Wei Lin
+
+ENV	TERM	linux 
+
+USER	root
+
+# Add user pi
+RUN \
+	useradd -G adm,sudo,users -s /bin/bash -m pi && \
+	echo 'pi:raspberry' | chpasswd
+
+
+# Install PocketMine ________________________________________________________________________________________________
+# Environmant variables 
+ENV	PocketMine_version	5.6.4
+ENV	PocketMine_HOME	/usr/local/pocketmine
+ENV	PocketMine_file	PHP_${PocketMine_version}_ARM_Raspbian_hard.tar.gz
+ENV	PocketMine_file_url	http://sourceforge.net/projects/pocketmine/files/builds/${PocketMine_file}/download
+
+# Install related packages
+RUN	apt-get update && \
+	apt-get install -y git wget autoconf automake libtool make build-essential apt-utils pkg-config wireless-tools && \
+	apt-get install -y --reinstall make 
+
+# Clone PocketMine source code
+RUN	mkdir -p ${PocketMine_HOME} && \
+	chown pi:pi ${PocketMine_HOME}
+
+# WORKDIR
+WORKDIR	${PocketMine_HOME}
+
+COPY	./pm/* ./
+
+RUN	chown pi:pi * && \
+	chmod 0755 setup.sh && \
+	chmod 0755 compile.sh
+
+# VOLUME 
+VOLUME /data
+
+# api-port
+EXPOSE 19132
+
+# Boot up
+CMD [${PocketMine_HOME}/start.sh]
+
+
+
+# Misc. ______________________________________________________________________________________________________
+
+# Upgrade and clean up
+RUN \
+	apt-get dist-upgrade -y && \
+	apt-get autoremove -y && \
+	apt-get autoclean -y && \
+	apt-get clean -y 
+# && rm -rf /var/lib/apt/lists/*
+
+#	wget -q -O setup.sh http://get.pocketmine.net/ | bash && \
+#	wget -q -O – http://get.pocketmine.net/ | bash && \
+#	wget -q -O – http://get.pocketmine.net/ | bash -s - -v Alpha_1.3.12 && \
+#	wget -q -O – http://get.pocketmine.net/ | bash -s – -v development  && \
+
+USER	pi
+
+#RUN	wget ${PocketMine_file_url} && \
+#	tar xvf download && \
+#	chmod 0755 bin/php5 && \
+#	chmod 0644 core  && \
+#	rm download
+
+RUN	./setup.sh && \
+	rm PocketMine-MP.phar && \
+	mv PocketMine-MP[0.13.0].phar  PocketMine-MP.phar 

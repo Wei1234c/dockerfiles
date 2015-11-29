@@ -82,7 +82,6 @@ RUN \
 	apt-get dist-upgrade -y && \
 	apt-get autoremove -y && \
 	apt-get autoclean -y && \
-	apt-get clean -y 
-
-# && rm -rf /var/lib/apt/lists/*
+	apt-get clean -y && \
+	rm -rf /var/lib/apt/lists/*
  

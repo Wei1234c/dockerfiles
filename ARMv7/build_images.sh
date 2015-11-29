@@ -25,7 +25,7 @@ docker build -t wei1234c/hbase_armv7 /dockerfiles/ARMv7/hbase
 docker build -t wei1234c/hive_armv7 /dockerfiles/ARMv7/hive
 docker build -t wei1234c/hadoop_full-distributed_armv7 /dockerfiles/ARMv7/hadoop/cluster/node
 docker build -t wei1234c/cgminer_armv7 /dockerfiles/ARMv7/cgminer
-
+docker build -t wei1234c/pocketmine_armv7 /dockerfiles/ARMv7/pocketmine
 
 
 docker tag wei1234c/ubuntu_armv7 ubuntu:latest
@@ -52,6 +52,7 @@ docker push wei1234c/hbase_armv7
 docker push wei1234c/hive_armv7
 docker push wei1234c/hadoop_full-distributed_armv7
 docker push wei1234c/cgminer_armv7
+docker push wei1234c/pocketmine_armv7
 
 call drmc
 call dcleanup
