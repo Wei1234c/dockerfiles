@@ -10,18 +10,21 @@ do
 	# INDEX=1
 
 	# Start containers
-	docker run -dit -P --name=miner_${INDEX} -v /data:/data wei1234c/cgminer_armv7 
+	echo "docker run -dit -p 3333:3333 --name=worker${INDEX} -v /data:/data wei1234c/cgminer_armv7"
+	docker run -dit -p 3333:3333 --name=worker${INDEX} -v /data:/data wei1234c/cgminer_armv7 
 
 	# start sshd
-	docker exec miner_${INDEX} service ssh start
+	docker exec worker${INDEX} service ssh start
 
 	# start mining
 	
 	USERNAME=${USER}.worker${INDEX}  
 	PASSWORD=${INDEX} 
 
-	docker exec miner_${INDEX} /bin/sh -c "/usr/local/cgminer/cgminer -o ${POOL} -u ${USERNAME} -p ${PASSWORD}"
+	echo "/usr/local/cgminer/cgminer -o ${POOL} -u ${USERNAME} -p ${PASSWORD}"
 
-	# docker exec miner_${INDEX} /bin/sh -c "/usr/local/cgminer/cgminer --bmsc-options 115200:0.57 -o ${POOL} -u ${USERNAME} -p ${PASSWORD} --bmsc-voltage 0800 --bmsc-freq 1286"
+	docker exec worker${INDEX} /bin/sh -c "/usr/local/cgminer/cgminer -o ${POOL} -u ${USERNAME} -p ${PASSWORD}"
+
+	# docker exec worker${INDEX} /bin/sh -c "/usr/local/cgminer/cgminer --bmsc-options 115200:0.57 -o ${POOL} -u ${USERNAME} -p ${PASSWORD} --bmsc-voltage 0800 --bmsc-freq 1286"
 
 done
