@@ -65,6 +65,11 @@ dhive(){
 	docker attach hive
 }
 
+dredis(){
+	echo "Starting Redis _________________________________________________"
+	docker run -dit -p 6379:6379 --name=redis -v /data:/data wei1234c/redis_armv7 
+}
+
 drmc(){
 	docker stop $(docker ps -q 2>/dev/null) 2>/dev/null
 	docker rm $(docker ps -aq 2>/dev/null) 2>/dev/null
