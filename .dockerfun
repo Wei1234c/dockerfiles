@@ -70,6 +70,31 @@ dredis(){
 	docker run -dit -p 6379:6379 --name=redis -v /data:/data wei1234c/redis_armv7 
 }
 
+dcelery(){
+	echo "Starting Celery _________________________________________________"
+	docker run -dit -p 5555:5555 --name=celery -v /data:/data wei1234c/celery_armv7 
+}
+
+dcelerycluster(){	
+
+	echo "Starting Redis container _________________________________________________"
+	docker run -dit -p 6379:6379 --name=redis -v /data:/data wei1234c/redis_armv7 
+
+
+	echo "Starting Celery cluster containers  _________________________________________________"
+	WORKER_COUNT=$1
+	CONCURRENCY=$2	
+
+	for (( i=1; i<=${WORKER_COUNT}; i=i+1 ))
+	do
+		docker run -d --name=celery${i} -v /data:/data wei1234c/celery_armv7 /bin/sh -c "cd /data/celery && celery -A server worker -n worker${i}.RPi --concurrency=${CONCURRENCY} --loglevel=INFO"
+	done
+
+
+	echo "Starting Flower container _________________________________________________"
+	docker run -d -p 5555:5555 --name=flower -v /data:/data wei1234c/celery_armv7 /bin/sh -c "cd /data/celery && celery -A server flower"
+}
+
 drmc(){
 	docker stop $(docker ps -q 2>/dev/null) 2>/dev/null
 	docker rm $(docker ps -aq 2>/dev/null) 2>/dev/null
