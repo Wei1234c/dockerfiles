@@ -65,6 +65,11 @@ dhive(){
 	docker attach hive
 }
 
+dmongodb(){
+	echo "Starting Mongodb_________________________________________________"
+	docker run -dit -p 27017:27017 -p 28017:28017 --name=mongodb -v /data:/data wei1234c/mongodb_armv7 
+}
+
 dredis(){
 	echo "Starting Redis _________________________________________________"
 	docker run -dit -p 6379:6379 --name=redis -v /data:/data wei1234c/redis_armv7 

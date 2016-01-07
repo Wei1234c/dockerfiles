@@ -1,5 +1,5 @@
-# Celery Worker Dockerfile
-# 20151229
+# IPython Parallel Dockerfile
+# 20160103
  
 FROM wei1234c/python_armv7
 
@@ -14,13 +14,13 @@ RUN \
 
 # Install Celery  ____________________________________________________________________________________________
 RUN \
-	pip3 install -U redis celery flower sqlalchemy pymongo
+	pip3 install -U sqlalchemy pymongo ipyparallel
 
     
 WORKDIR /data
 
 USER pi
 
-EXPOSE 5555
+EXPOSE 8888
 
 CMD ["bash"]
