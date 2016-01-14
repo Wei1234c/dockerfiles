@@ -75,6 +75,11 @@ dredis(){
 	docker run -dit -p 6379:6379 --name=redis -v /data:/data wei1234c/redis_armv7 
 }
 
+dconsul(){
+	echo "Starting Consul _________________________________________________"
+	docker $(docker-machine config consul) run -d --restart=always -p 8500:8500 --name=consul -h consul nimblestratus/rpi-consul -server -bootstrap
+}
+
 dcelery(){
 	echo "Starting Celery _________________________________________________"
 	docker run -dit -p 5555:5555 --name=celery -v /data:/data wei1234c/celery_armv7 
@@ -92,12 +97,70 @@ dcelerycluster(){
 
 	for (( i=1; i<=${WORKER_COUNT}; i=i+1 ))
 	do
-		docker run -d --name=celery${i} -v /data:/data wei1234c/celery_armv7 /bin/sh -c "cd /data/celery && celery -A server worker -n worker${i}.RPi --concurrency=${CONCURRENCY} --loglevel=INFO"
+		docker run -d --name=celery${i} -v /data:/data wei1234c/celery_armv7 /bin/sh -c "cd /data/celery && celery -A server worker -n worker${i}.rpi2.%h --concurrency=${CONCURRENCY} --loglevel=INFO"
 	done
 
 
 	echo "Starting Flower container _________________________________________________"
 	docker run -d -p 5555:5555 --name=flower -v /data:/data wei1234c/celery_armv7 /bin/sh -c "cd /data/celery && celery -A server flower"
+}
+
+ddockerui(){
+	echo "Starting DockerUI _________________________________________________"
+
+	# DockerUI
+
+	rpi202='192.168.0.114'
+	docker $(docker-machine config --swarm rpi202) run -d -p 9000:9000 --env="constraint:node==rpi202" --name dockerui hypriot/rpi-dockerui -e http://${rpi202}:2376
+	docker $(docker-machine config --swarm rpi202) ps
+}
+
+dstartdockerswarm(){
+
+	echo "Starting Docker Swarm _________________________________________________"
+
+	# Restart Swarm-Manager _____________________________________________________________________
+
+	# rpi202 ________________
+
+	eval $(docker-machine env rpi202)
+	docker run -d \
+	--restart=always \
+	--name swarm-agent-master \
+	-p 3376:3376 \
+	-v /etc/docker:/etc/docker \
+	hypriot/rpi-swarm \
+	manage \
+	--tlsverify \
+	--tlscacert=/etc/docker/ca.pem \
+	--tlscert=/etc/docker/server.pem \
+	--tlskey=/etc/docker/server-key.pem \
+	-H tcp://0.0.0.0:3376 \
+	--strategy spread nodes://192.168.0.109:2376,192.168.0.114:2376
+
+	# Restart Swarm-Node
+	sudo docker run -d \
+	--restart=always \
+	--name swarm-agent \
+	hypriot/rpi-swarm \
+	join --advertise 192.168.0.114:2376 nodes://192.168.0.109:2376,192.168.0.114:2376
+
+
+	# rpi201 ________________
+
+	eval $(docker-machine env rpi201)
+	sudo docker run -d \
+	--restart=always \
+	--name swarm-agent \
+	hypriot/rpi-swarm \
+	join --advertise 192.168.0.109:2376 nodes://192.168.0.109:2376,192.168.0.114:2376
+}
+
+dunsetdockermachine(){
+	unset DOCKER_HOST
+	unset DOCKER_MACHINE_NAME
+	unset DOCKER_CERT_PATH
+	unset DOCKER_TLS_VERIFY
 }
 
 drmc(){

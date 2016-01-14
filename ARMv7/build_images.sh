@@ -2,6 +2,7 @@
 
 docker pull armv7/armhf-ubuntu:14.04
 docker tag armv7/armhf-ubuntu:14.04 ubuntu:14.04
+docker pull nimblestratus/rpi-consul
 
 
 docker build -t wei1234c/ubuntu_armv7 /dockerfiles/ARMv7/ubuntu
