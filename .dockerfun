@@ -72,12 +72,20 @@ dmongodb(){
 
 dredis(){
 	echo "Starting Redis _________________________________________________"
-	docker run -dit -p 6379:6379 --name=redis -v /data:/data wei1234c/redis_armv7 
+	docker run -dit -p 6379:6379 --name=redis -v /data:/data hypriot/rpi-redis 
 }
 
 dconsul(){
 	echo "Starting Consul _________________________________________________"
 	docker $(docker-machine config consul) run -d --restart=always -p 8500:8500 --name=consul -h consul nimblestratus/rpi-consul -server -bootstrap
+}
+
+doverlaynetwork(){
+	echo "Create Overlay Network _________________________________________________"
+
+	docker $(docker-machine config --swarm rpi202) network create --driver=overlay overlay-network
+	# docker run -itd --name=web --net=overlay-network  --env="constraint:node==swl-master" hypriot/rpi-nano-httpd  
+	# docker run -it --rm --net=overlay-network --env="contraint:node=swl-slave" hypriot/armhf-busybox wget -O- http://web 
 }
 
 dcelery(){
@@ -88,7 +96,7 @@ dcelery(){
 dcelerycluster(){	
 
 	echo "Starting Redis container _________________________________________________"
-	docker run -dit -p 6379:6379 --name=redis -v /data:/data wei1234c/redis_armv7 
+	docker run -dit -p 6379:6379 --name=redis -v /data:/data hypriot/rpi-redis 
 
 
 	echo "Starting Celery cluster containers  _________________________________________________"
@@ -124,6 +132,7 @@ dstartdockerswarm(){
 	# rpi202 ________________
 
 	eval $(docker-machine env rpi202)
+	docker-machine ls
 	docker run -d \
 	--restart=always \
 	--name swarm-agent-master \
@@ -138,22 +147,31 @@ dstartdockerswarm(){
 	-H tcp://0.0.0.0:3376 \
 	--strategy spread nodes://192.168.0.109:2376,192.168.0.114:2376
 
+	echo "Swarm Manager setup completed ____________"
+
+
 	# Restart Swarm-Node
-	sudo docker run -d \
+	docker-machine ls
+	docker run -d \
 	--restart=always \
 	--name swarm-agent \
 	hypriot/rpi-swarm \
 	join --advertise 192.168.0.114:2376 nodes://192.168.0.109:2376,192.168.0.114:2376
 
+	echo "Swarm Node rpi202 setup completed ____________"
 
 	# rpi201 ________________
 
 	eval $(docker-machine env rpi201)
-	sudo docker run -d \
+	docker-machine ls
+	docker run -d \
 	--restart=always \
 	--name swarm-agent \
 	hypriot/rpi-swarm \
 	join --advertise 192.168.0.109:2376 nodes://192.168.0.109:2376,192.168.0.114:2376
+	
+	echo "Swarm Node rpi201 setup completed ____________"
+
 }
 
 dunsetdockermachine(){

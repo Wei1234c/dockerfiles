@@ -27,10 +27,10 @@ docker build -t wei1234c/hive_armv7 /dockerfiles/ARMv7/hive
 docker build -t wei1234c/hadoop_full-distributed_armv7 /dockerfiles/ARMv7/hadoop/cluster/node
 docker build -t wei1234c/cgminer_armv7 /dockerfiles/ARMv7/cgminer
 docker build -t wei1234c/pocketmine_armv7 /dockerfiles/ARMv7/pocketmine
-# docker build -t wei1234c/rabbitmq_armv7 /dockerfiles/ARMv7/rabbitmq
 docker build -t wei1234c/redis_armv7 /dockerfiles/ARMv7/redis
 docker build -t wei1234c/celery_armv7 /dockerfiles/ARMv7/celery
 docker build -t wei1234c/ipython_parallel_armv7 /dockerfiles/ARMv7/ipp
+docker build -t wei1234c/alpine_armv7 /dockerfiles/ARMv7/alpine
 
 docker tag wei1234c/ubuntu_armv7 ubuntu:latest
 
@@ -60,6 +60,7 @@ docker push wei1234c/pocketmine_armv7
 docker push wei1234c/redis_armv7
 docker push wei1234c/celery_armv7
 docker push wei1234c/ipython_parallel_armv7
+docker push wei1234c/alpine_armv7 
 
 call drmc
 call dcleanup
