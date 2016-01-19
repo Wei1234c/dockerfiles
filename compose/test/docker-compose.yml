@@ -1,0 +1,8 @@
+ubuntu: 
+  image: wei1234c/ubuntu_armv7
+  command: /bin/bash
+
+apache: 
+  image: wei1234c/apache_armv7 
+  ports:
+    - "80"

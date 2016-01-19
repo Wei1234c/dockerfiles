@@ -1,0 +1,8 @@
+mongodb: 
+  image: wei1234c/mongodb_armv7
+  container_name: "mongodb"
+  volumes:
+    - /data:/data
+  ports:
+    - "27017:27017"
+    - "28017:28017"

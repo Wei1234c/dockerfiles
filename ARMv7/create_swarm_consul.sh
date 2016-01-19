@@ -28,10 +28,11 @@ echo ${node01}
 # 使用 Consul server ____________________________________________________________________________
 # http://blog.hypriot.com/post/let-docker-swarm-all-over-your-raspberry-pi-cluster/ 
 
+# networkinterface=wlan0
+# echo ${networkinterface}
 consul=${master01}
 echo ${consul}
-networkinterface=wlan0
-echo ${networkinterface}
+
 
 # Create Consul server
 # docker-machine rm consul

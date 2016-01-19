@@ -72,20 +72,39 @@ dmongodb(){
 
 dredis(){
 	echo "Starting Redis _________________________________________________"
-	docker run -dit -p 6379:6379 --name=redis -v /data:/data hypriot/rpi-redis 
+	docker run -dit -p 6379:6379 --name=redis -v /data:/data hypriot/rpi-redis
 }
 
 dconsul(){
 	echo "Starting Consul _________________________________________________"
-	docker $(docker-machine config consul) run -d --restart=always -p 8500:8500 --name=consul -h consul nimblestratus/rpi-consul -server -bootstrap
+	
+	# 初始化變數 _____________________
+	rpi201='192.168.0.109'
+	rpi202='192.168.0.114'
+	master01=${rpi202}
+	node01=${rpi201}
+	echo ${master01}
+	echo ${node01}
+	
+	consul=${master01}
+	echo ${consul}
+
+	# Create Consul server
+	# docker-machine rm consul
+	# docker-machine -D create --driver=hypriot --hypriot-ip-address=${consul} consul
+	# docker $(docker-machine config consul) run -d --restart=always -p 8500:8500  --name=consul --hostname=consul nimblestratus/rpi-consul -server -bootstrap 
+	  docker                                 run -d --restart=always -p 8500:8500  --name=consul --hostname=consul nimblestratus/rpi-consul -server -bootstrap 
 }
 
 doverlaynetwork(){
 	echo "Create Overlay Network _________________________________________________"
+	docker $(docker-machine config --swarm master01) network create --driver=overlay overlay-network
+	docker $(docker-machine config --swarm master01) network ls
+}
 
-	docker $(docker-machine config --swarm rpi202) network create --driver=overlay overlay-network
-	# docker run -itd --name=web --net=overlay-network  --env="constraint:node==swl-master" hypriot/rpi-nano-httpd  
-	# docker run -it --rm --net=overlay-network --env="contraint:node=swl-slave" hypriot/armhf-busybox wget -O- http://web 
+dswarmdo(){
+	echo "docker $(docker-machine config --swarm master01) $@"
+	docker $(docker-machine config --swarm master01) $@
 }
 
 dcelery(){
@@ -93,46 +112,53 @@ dcelery(){
 	docker run -dit -p 5555:5555 --name=celery -v /data:/data wei1234c/celery_armv7 
 }
 
-dcelerycluster(){	
+dcelerycluster(){
 
 	echo "Starting Redis container _________________________________________________"
-	docker run -dit -p 6379:6379 --name=redis -v /data:/data hypriot/rpi-redis 
+	docker run -d -p 6379:6379 --name=redis -v /data:/data hypriot/rpi-redis 
 
-
-	echo "Starting Celery cluster containers  _________________________________________________"
-	WORKER_COUNT=$1
-	CONCURRENCY=$2	
+	echo "Starting Celery cluster containers _________________________________________________"
+	PROJECT=$1
+	WORKER_COUNT=$2
+	CONCURRENCY=$3
 
 	for (( i=1; i<=${WORKER_COUNT}; i=i+1 ))
 	do
-		docker run -d --name=celery${i} -v /data:/data wei1234c/celery_armv7 /bin/sh -c "cd /data/celery && celery -A server worker -n worker${i}.rpi2.%h --concurrency=${CONCURRENCY} --loglevel=INFO"
+		docker run -d --name=celery${i} --hostname=celery${i} --volume=/data/celery_projects:/celery_projects wei1234c/celery_armv7 /bin/sh -c "cd /celery_projects && celery -A ${PROJECT} worker -n worker${i}.%h.${HOSTNAME} --concurrency=${CONCURRENCY} --loglevel=INFO"
 	done
 
-
+	
 	echo "Starting Flower container _________________________________________________"
-	docker run -d -p 5555:5555 --name=flower -v /data:/data wei1234c/celery_armv7 /bin/sh -c "cd /data/celery && celery -A server flower"
+	docker run -d -p 5555:5555 --name=flower --volume=/data/celery_projects:/celery_projects wei1234c/celery_armv7 /bin/sh -c "cd /celery_projects && celery -A ${PROJECT} flower"
 }
 
 ddockerui(){
 	echo "Starting DockerUI _________________________________________________"
-
 	# DockerUI
-
 	rpi202='192.168.0.114'
-	docker $(docker-machine config --swarm rpi202) run -d -p 9000:9000 --env="constraint:node==rpi202" --name dockerui hypriot/rpi-dockerui -e http://${rpi202}:2376
-	docker $(docker-machine config --swarm rpi202) ps
+	master01=${rpi202}
+	docker pull hypriot/rpi-dockerui
+	docker $(docker-machine config --swarm master01) run -d -p 9000:9000 --env="constraint:node==master01" --name=dockerui hypriot/rpi-dockerui -e http://${master01}:3376 
+	# docker run -d -p 9000:9000 --name=dockerui hypriot/rpi-dockerui -e http://${master01}:3376 
+	docker $(docker-machine config --swarm master01) ps
 }
 
 dstartdockerswarm(){
 
 	echo "Starting Docker Swarm _________________________________________________"
 
+	# 初始化變數 _____________________
+	rpi201='192.168.0.109'
+	rpi202='192.168.0.114'
+	master01=${rpi202}
+	node01=${rpi201}
+	echo ${master01}
+	echo ${node01}
+
+
 	# Restart Swarm-Manager _____________________________________________________________________
 
-	# rpi202 ________________
-
-	eval $(docker-machine env rpi202)
-	docker-machine ls
+	eval $(docker-machine env master01)
 	docker run -d \
 	--restart=always \
 	--name swarm-agent-master \
@@ -145,32 +171,28 @@ dstartdockerswarm(){
 	--tlscert=/etc/docker/server.pem \
 	--tlskey=/etc/docker/server-key.pem \
 	-H tcp://0.0.0.0:3376 \
-	--strategy spread nodes://192.168.0.109:2376,192.168.0.114:2376
+	--strategy spread consul://${master01}:8500
 
-	echo "Swarm Manager setup completed ____________"
-
-
-	# Restart Swarm-Node
-	docker-machine ls
-	docker run -d \
+	 docker run -d \
 	--restart=always \
 	--name swarm-agent \
 	hypriot/rpi-swarm \
-	join --advertise 192.168.0.114:2376 nodes://192.168.0.109:2376,192.168.0.114:2376
+	join --advertise ${master01}:2376 consul://${master01}:8500
 
-	echo "Swarm Node rpi202 setup completed ____________"
-
-	# rpi201 ________________
-
-	eval $(docker-machine env rpi201)
-	docker-machine ls
-	docker run -d \
-	--restart=always \
-	--name swarm-agent \
-	hypriot/rpi-swarm \
-	join --advertise 192.168.0.109:2376 nodes://192.168.0.109:2376,192.168.0.114:2376
+	echo "Swarm Manager master01 setup completed ____________"
 	
-	echo "Swarm Node rpi201 setup completed ____________"
+	
+	eval $(docker-machine env node01)
+	docker run -d \
+	--restart=always \
+	--name swarm-agent \
+	hypriot/rpi-swarm \
+	join --advertise ${node01}:2376 consul://${master01}:8500
+	
+	echo "Swarm Node node01 setup completed ____________"
+
+	dunsetdockermachine
+	docker $(docker-machine config --swarm master01) info
 
 }
 
@@ -178,12 +200,12 @@ dunsetdockermachine(){
 	unset DOCKER_HOST
 	unset DOCKER_MACHINE_NAME
 	unset DOCKER_CERT_PATH
-	unset DOCKER_TLS_VERIFY
+	unset DOCKER_TLS_VERIFY	
 }
 
 drmc(){
 	docker stop $(docker ps -q 2>/dev/null) 2>/dev/null
-	docker rm $(docker ps -aq 2>/dev/null) 2>/dev/null
+	docker rm -v $(docker ps -aq 2>/dev/null) 2>/dev/null
 }
 
 dcleanup(){

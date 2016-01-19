@@ -1,0 +1,7 @@
+redis: 
+  image: hypriot/rpi-redis
+  container_name: redis
+  volumes:
+    - /data:/data
+  ports:
+    - "6379:6379" 
