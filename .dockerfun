@@ -115,18 +115,21 @@ dcelery(){
 dcelerycluster(){
 
 	echo "Starting Redis container _________________________________________________"
-	docker run -d -p 6379:6379 --name=redis -v /data:/data hypriot/rpi-redis 
+	docker run -d -p 6379:6379 --name=redis --volume=/data:/data hypriot/rpi-redis
 
 	echo "Starting Celery cluster containers _________________________________________________"
-	PROJECT=$1
-	WORKER_COUNT=$2
-	CONCURRENCY=$3
 
-	for (( i=1; i<=${WORKER_COUNT}; i=i+1 ))
+	eval $(docker-machine env --swarm master01)
+
+	PROJECT=$1  # project 名稱
+	WORKER_START_ID=$2  # worker container 編號 第一個
+	WORKER_LAST_ID=$3  # worker container 編號 最後一個
+	CONCURRENCY=$4  # 每個 worker 可以有幾個 subprocesses
+
+	for (( i=${WORKER_START_ID}; i<=${WORKER_LAST_ID}; i=i+1 ))
 	do
-		docker run -d --name=celery${i} --hostname=celery${i} --volume=/data/celery_projects:/celery_projects wei1234c/celery_armv7 /bin/sh -c "cd /celery_projects && celery -A ${PROJECT} worker -n worker${i}.%h.${HOSTNAME} --concurrency=${CONCURRENCY} --loglevel=INFO"
+	  docker run -d --name=${PROJECT}_celery${i} --hostname=${PROJECT}_celery${i} --net=mynet --volume=/data/celery_projects:/celery_projects wei1234c/celery_armv7 /bin/sh -c "cd /celery_projects && celery -A ${PROJECT} worker -n worker${i}.%h --concurrency=${CONCURRENCY} --loglevel=INFO"
 	done
-
 	
 	echo "Starting Flower container _________________________________________________"
 	docker run -d -p 5555:5555 --name=flower --volume=/data/celery_projects:/celery_projects wei1234c/celery_armv7 /bin/sh -c "cd /celery_projects && celery -A ${PROJECT} flower"
@@ -201,6 +204,10 @@ dunsetdockermachine(){
 	unset DOCKER_MACHINE_NAME
 	unset DOCKER_CERT_PATH
 	unset DOCKER_TLS_VERIFY	
+}
+
+dstopandremove(){
+	docker stop $1 && docker rm $1 
 }
 
 drmc(){
