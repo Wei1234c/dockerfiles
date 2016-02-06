@@ -1,29 +1,40 @@
 # Set Docker hosts IPs
 rpi201='192.168.0.109'
 rpi202='192.168.0.114'
+rpi101='192.168.0.107'
 master01=${rpi202}
 node01=${rpi201}
+node02=${rpi101}
 echo ${master01}
 echo ${node01}
+echo ${node02}
 
 # Set up /etc/hosts
 sudo echo "${rpi201} rpi201" >> /etc/hosts
 sudo echo "${rpi202} rpi202" >> /etc/hosts
+sudo echo "${rpi102} rpi102" >> /etc/hosts
+
 
 # SSH key login
 ssh-copy-id root@master01
 ssh-copy-id root@node01
+ssh-copy-id root@node02
 ssh root@master01
 ssh root@node01
+ssh root@node02
 
 
 # 初始化變數 _____________________
 rpi201='192.168.0.109'
 rpi202='192.168.0.114'
+rpi101='192.168.0.107'
 master01=${rpi202}
 node01=${rpi201}
+node02=${rpi101}
 echo ${master01}
 echo ${node01}
+echo ${node02}
+
 
 # 使用 Consul server ____________________________________________________________________________
 # http://blog.hypriot.com/post/let-docker-swarm-all-over-your-raspberry-pi-cluster/ 
@@ -57,7 +68,7 @@ create \
 --engine-opt="cluster-advertise=${master01}:2376" \
 master01
 
-# Swarm Node
+# Swarm Nodes
 docker-machine rm node01
 docker-machine -D \
 create \
@@ -69,6 +80,18 @@ create \
 --engine-opt="cluster-store=consul://${master01}:8500" \
 --engine-opt="cluster-advertise=${node01}:2376" \
 node01
+
+docker-machine rm node02
+docker-machine -D \
+create \
+--driver=hypriot \
+--hypriot-ip-address=${node02} \
+--swarm \
+--swarm-image=hypriot/rpi-swarm \
+--swarm-discovery="consul://${master01}:8500" \
+--engine-opt="cluster-store=consul://${master01}:8500" \
+--engine-opt="cluster-advertise=${node02}:2376" \
+node02
 
 
 docker-machine ls
@@ -107,6 +130,13 @@ docker run -d \
 hypriot/rpi-swarm \
 join --advertise ${node01}:2376 consul://${master01}:8500
 
+
+eval $(docker-machine env node02)
+docker run -d \
+--restart=always \
+--name swarm-agent \
+hypriot/rpi-swarm \
+join --advertise ${node02}:2376 consul://${master01}:8500
 
 
 
