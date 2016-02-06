@@ -151,6 +151,7 @@ dstartdockerswarm(){
 	echo "Starting Docker Swarm _________________________________________________"
 
 	# 初始化變數 _____________________
+	echo "# Set Docker hosts IPs ____________________________________"
 	rpi201='192.168.0.109'
 	rpi202='192.168.0.114'
 	master01=${rpi202}
@@ -158,10 +159,14 @@ dstartdockerswarm(){
 	echo ${master01}
 	echo ${node01}
 
-
-	# Restart Swarm-Manager _____________________________________________________________________
-
+	
 	eval $(docker-machine env master01)
+
+	echo "# Create Consul server ____________________________________"
+	docker                                 run -d --restart=always -p 8500:8500  --name=consul --hostname=consul nimblestratus/rpi-consul -server -bootstrap 
+  	
+
+	echo "# Create Swarm manager ____________________________________"
 	docker run -d \
 	--restart=always \
 	--name swarm-agent-master \
@@ -174,7 +179,7 @@ dstartdockerswarm(){
 	--tlscert=/etc/docker/server.pem \
 	--tlskey=/etc/docker/server-key.pem \
 	-H tcp://0.0.0.0:3376 \
-	--strategy spread consul://${master01}:8500
+	--strategy spread  consul://${master01}:8500
 
 	 docker run -d \
 	--restart=always \
@@ -182,21 +187,19 @@ dstartdockerswarm(){
 	hypriot/rpi-swarm \
 	join --advertise ${master01}:2376 consul://${master01}:8500
 
-	echo "Swarm Manager master01 setup completed ____________"
-	
-	
+
+	echo " Create Swarm nodes ____________________________________"
 	eval $(docker-machine env node01)
 	docker run -d \
 	--restart=always \
 	--name swarm-agent \
 	hypriot/rpi-swarm \
 	join --advertise ${node01}:2376 consul://${master01}:8500
-	
+
 	echo "Swarm Node node01 setup completed ____________"
 
-	dunsetdockermachine
 	docker $(docker-machine config --swarm master01) info
-
+	dunsetdockermachine
 }
 
 dunsetdockermachine(){
