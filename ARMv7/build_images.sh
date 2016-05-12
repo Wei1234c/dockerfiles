@@ -31,6 +31,8 @@ docker build -t wei1234c/redis_armv7 /dockerfiles/ARMv7/redis
 docker build -t wei1234c/celery_armv7 /dockerfiles/ARMv7/celery
 docker build -t wei1234c/ipython_parallel_armv7 /dockerfiles/ARMv7/ipp
 docker build -t wei1234c/alpine_armv7 /dockerfiles/ARMv7/alpine
+docker build -t wei1234c/one_for_all_all_for_one_armv7 /dockerfiles/ARMv7/one_for_all_all_for_one
+
 
 docker tag wei1234c/ubuntu_armv7 ubuntu:latest
 
@@ -60,7 +62,9 @@ docker push wei1234c/pocketmine_armv7
 docker push wei1234c/redis_armv7
 docker push wei1234c/celery_armv7
 docker push wei1234c/ipython_parallel_armv7
-docker push wei1234c/alpine_armv7 
+docker push wei1234c/alpine_armv7
+docker push wei1234c/one_for_all_all_for_one_armv7
+
 
 call drmc
 call dcleanup
