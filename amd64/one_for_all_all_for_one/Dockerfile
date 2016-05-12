@@ -1,6 +1,6 @@
 # one_for_all_all_for_one
 # Celery Worker Dockerfile
-# for Intel64
+# for amd64
 # 20160512
  
 FROM celery
