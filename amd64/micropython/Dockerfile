@@ -1,7 +1,7 @@
 # by: Wei Lin
 # date: 2017/2/18  
 
-FROM wei1234c/esp8266_armv7
+FROM wei1234c/esp8266
 
 MAINTAINER Wei Lin
 
