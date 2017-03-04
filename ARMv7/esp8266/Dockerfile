@@ -4,7 +4,7 @@
 #	https://gist.github.com/hoihu/bebcb195287233b7c6ff477e235d2fc4 
 
 
-FROM wei1234c/ubuntu_armv7:16.10
+FROM armv7/armhf-ubuntu:16.04
 
 MAINTAINER Wei Lin
 

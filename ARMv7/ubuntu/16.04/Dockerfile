@@ -1,7 +1,7 @@
 # by: Wei Lin
 # date: 2017/2/20
 
-FROM	armv7/armhf-ubuntu:16.10
+FROM	armv7/armhf-ubuntu:16.04
 
 MAINTAINER	Wei Lin
 

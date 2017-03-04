@@ -32,10 +32,8 @@ docker build -t wei1234c/celery_armv7 /dockerfiles/ARMv7/celery
 docker build -t wei1234c/ipython_parallel_armv7 /dockerfiles/ARMv7/ipp
 docker build -t wei1234c/alpine_armv7 /dockerfiles/ARMv7/alpine
 docker build -t wei1234c/one_for_all_all_for_one_armv7 /dockerfiles/ARMv7/one_for_all_all_for_one
-docker build -t wei1234c/ubuntu_armv7:16.10 /dockerfiles/ARMv7/ubuntu/16.10
-docker build -t wei1234c/esp8266_armv7 /dockerfiles/ARMv7/esp8266
-docker build -t wei1234c/micropython_armv7 /dockerfiles/ARMv7/micropython
-docker tag wei1234c/ubuntu_armv7:16.10 ubuntu:latest 
+docker build -t wei1234c/ubuntu_armv7:16.04 /dockerfiles/ARMv7/ubuntu/16.04
+docker tag wei1234c/ubuntu_armv7:16.04 ubuntu:latest 
 
 
 docker push wei1234c/ubuntu_armv7
