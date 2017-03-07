@@ -28,8 +28,8 @@ ENV 	PATH /home/xtensa/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
 
 USER xtensa
 WORKDIR /home/xtensa/esp-open-sdk
-RUN 	make STANDALONE=y
-
+RUN 	make
+# RUN 	make STANDALONE=y
 
 
 # Misc. ______________________________________________________________________________________________________
