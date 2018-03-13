@@ -102,7 +102,7 @@ WORKDIR /home/pi/ros_catkin_ws
 RUN	rosdep install -y --from-paths src --ignore-src --rosdistro kinetic -r --os=debian:jessie
 
 # Building the catkin Workspace
-RUN	sudo src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/kinetic -j2
+RUN	sudo src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/kinetic -j1
 RUN	sudo chmod +x /opt/ros/kinetic/setup.*
 RUN	source /opt/ros/kinetic/setup.bash
 # RUN	echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
