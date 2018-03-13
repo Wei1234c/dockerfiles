@@ -14,7 +14,3 @@ docker run -it --rm \
 
 #	--name=ROS \
 
-# docker run -it --rm \
-#        -e DISPLAY=$DISPLAY \
-#        -v /tmp/.X11-unix:/tmp/.X11-unix \
-#        wei1234c/ros_ubuntu_amd64
