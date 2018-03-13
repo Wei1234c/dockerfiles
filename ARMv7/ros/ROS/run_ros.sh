@@ -9,7 +9,7 @@ docker run -it --rm \
 	--device /dev/dri \
 	-v /dev/shm:/dev/shm \
 	-p 11311:11311 \
-	wei1234c/ros_ubuntu_armv7
+	wei1234c/ros_armv7
 
 
 #	--name=ROS \
