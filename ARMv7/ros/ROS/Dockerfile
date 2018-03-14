@@ -104,8 +104,16 @@ RUN	rosdep install -y --from-paths src --ignore-src --rosdistro kinetic -r --os=
 # Building the catkin Workspace
 RUN	sudo src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/kinetic -j1
 RUN	sudo chmod +x /opt/ros/kinetic/setup.*
-RUN	source /opt/ros/kinetic/setup.bash
-# RUN	echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
+
+ENV	ROS_PACKAGE_PATH=/home/pi/ros_catkin_ws/src:/opt/ros/kinetic/share
+ENV	ROS_ETC_DIR=/opt/ros/kinetic/etc/ros
+ENV	ROS_DISTRO=kinetic
+ENV	ROS_ROOT=/opt/ros/kinetic/share/ros
+ENV	ROSLISP_PACKAGE_DIRECTORIES=/home/pi/ros_catkin_ws/devel/share/common-lisp:
+ENV	ROS_MASTER_URI=http://localhost:11311
+ENV	LD_LIBRARY_PATH=/home/pi/ros_catkin_ws/devel:/opt/ros/kinetic/lib
+ENV	PKG_CONFIG_PATH=/home/pi/ros_catkin_ws/devel/lib/pkgconfig:/opt/ros/kinetic/lib/pkgconfig
+ENV	CMAKE_PREFIX_PATH=/home/pi/ros_catkin_ws/devel/lib:/opt/ros/kinetic
 
 # Maintaining a Source Checkout
 # Adding Released Packages
@@ -120,7 +128,7 @@ RUN	wstool merge -t src kinetic-custom_ros.rosinstall && \
 RUN	rosdep install --from-paths src --ignore-src --rosdistro kinetic -y -r --os=debian:jessie
 
 # rebuild the workspace:
-RUN	sudo src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/kinetic
+RUN	sudo /home/pi/ros_catkin_ws/src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/kinetic -j1
 
 
 

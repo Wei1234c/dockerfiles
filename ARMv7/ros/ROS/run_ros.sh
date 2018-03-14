@@ -6,7 +6,6 @@ docker run -it --rm \
 	-e DISPLAY=unix$DISPLAY \
 	--cap-add=SYS_ADMIN \
 	--device /dev/snd \
-	--device /dev/dri \
 	-v /dev/shm:/dev/shm \
 	-p 11311:11311 \
 	wei1234c/ros_armv7
