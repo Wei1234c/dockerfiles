@@ -1,0 +1,1 @@
+docker build -t wei1234c/gnuradio .  #  --build-arg user_id=${UID} --build-arg user_name=gnuradio_user  --build-arg workdir=/tmp/gnuradio
