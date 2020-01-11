@@ -75,8 +75,8 @@ RUN  \
 	
 # for Xwindow **********************************************
 ARG	user_id=1000
-ARG	user_name=gnuradio_user
-ARG workdir=/tmp/gnuradio
+ARG	user_name=sdr_user
+ARG workdir=/tmp/sdr
 
 RUN \ 
 	useradd --create-home \ 
@@ -84,7 +84,7 @@ RUN \
 				  --groups audio,video,sudo \ 
 				  --uid $user_id \ 
 				  $user_name && \ 
-	echo $user_name:gnuradio | chpasswd
+	echo $user_name:sdr | chpasswd
 	
 RUN	chown -R root:sudo /tmp	
 
