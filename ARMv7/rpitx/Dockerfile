@@ -23,7 +23,7 @@ RUN \
 USER	pi
 
 RUN \ 
-	cd /home/pi
+	cd /home/pi && \ 
 	git clone https://github.com/F5OEO/rpitx && \ 
 	cd rpitx && \ 
 	./install.sh
