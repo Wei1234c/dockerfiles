@@ -65,6 +65,7 @@ docker push wei1234c/ipython_parallel_armv7
 docker push wei1234c/alpine_armv7
 docker push wei1234c/one_for_all_all_for_one_armv7
 docker push wei1234c/esp8266_armv7
+docker push wei1234c/rpitx
 
 call drmc
 call dcleanup
