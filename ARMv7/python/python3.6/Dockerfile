@@ -18,8 +18,8 @@ USER	root
 # Install Python. ____________________________________________________________________________________________
 RUN apt-get update && \ 
 	apt-get install -y build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev
-	apt-get install -y zlib1g zlib1g-dev
-	apt-get install -y openssl libssl-dev
+RUN \ 
+	apt-get install -y zlib1g zlib1g-dev openssl libssl-dev
 
 # Add user pi
 RUN \ 
