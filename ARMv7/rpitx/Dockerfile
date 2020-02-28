@@ -1,6 +1,6 @@
 # https://github.com/F5OEO/rpitx
 
-FROM	armv7/armhf-ubuntu
+FROM	raspbian/jessie
 
 MAINTAINER	Wei Lin
 
