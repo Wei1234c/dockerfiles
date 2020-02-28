@@ -46,4 +46,5 @@ RUN \
 
 
 # Define default command.
+WORKDIR /home/pi
 CMD ["bash"] 
