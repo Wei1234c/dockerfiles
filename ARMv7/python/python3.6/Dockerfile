@@ -20,12 +20,17 @@ RUN apt-get update && \
 	apt-get install -y build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev
 RUN \ 
 	apt-get install -y zlib1g zlib1g-dev openssl libssl-dev
+RUN \ 
+	apt-get install -y sudo
 
 # Add user pi
 RUN useradd -G adm,users,sudo,staff,dialout -s /bin/bash pi
 RUN \ 
 	usermod -a -G adm,dialout,sudo,staff,users,pi pi && \ 
 	echo 'pi:raspberry' | chpasswd
+	
+RUN \ 
+	chown -R pi:pi /home/pi
 	
 USER	pi
 
