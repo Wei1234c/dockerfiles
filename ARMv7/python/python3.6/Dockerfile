@@ -46,6 +46,6 @@ WORKDIR /home/pi
 	# sudo ln -s /usr/local/bin/pip3.6 /usr/bin/pip3
 
 
-Define default command.
+## Define default command.
 # WORKDIR /home/pi
 CMD ["bash"] 
