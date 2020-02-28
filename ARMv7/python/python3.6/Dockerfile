@@ -33,22 +33,22 @@ RUN \
 USER	pi
 
 WORKDIR /home/pi
-# RUN \ 
-	# wget https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tar.xz && \ 
-	# tar -xvf Python-3.6.10.tar.xz && \ 
+RUN \ 
+	wget https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tar.xz && \ 
+	tar -xvf Python-3.6.10.tar.xz && \ 
 
-# WORKDIR /home/pi/Python-3.6.10 
-# RUN \ 
-	# ./configure --with-ssl && \ 
-	# make
-# RUN \ 
-	# make altinstall && \ 
+WORKDIR /home/pi/Python-3.6.10 
+RUN \ 
+	./configure --with-ssl && \ 
+	make
+RUN \ 
+	make altinstall && \ 
 
-# RUN \ 
-	# sudo ln -s /usr/local/bin/python3.6 /usr/bin/python3 && \ 
-	# sudo ln -s /usr/local/bin/pip3.6 /usr/bin/pip3
+RUN \ 
+	sudo ln -s /usr/local/bin/python3.6 /usr/bin/python3 && \ 
+	sudo ln -s /usr/local/bin/pip3.6 /usr/bin/pip3
 
 
-## Define default command.
-# WORKDIR /home/pi
+# Define default command.
+WORKDIR /home/pi
 CMD ["bash"] 
