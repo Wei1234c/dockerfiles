@@ -35,7 +35,7 @@ USER	pi
 WORKDIR /home/pi
 RUN \ 
 	wget https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tar.xz && \ 
-	tar -xvf Python-3.6.10.tar.xz && \ 
+	tar -xvf Python-3.6.10.tar.xz
 
 WORKDIR /home/pi/Python-3.6.10 
 RUN \ 
