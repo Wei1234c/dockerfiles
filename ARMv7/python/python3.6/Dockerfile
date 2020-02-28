@@ -22,9 +22,9 @@ RUN \
 	apt-get install -y zlib1g zlib1g-dev openssl libssl-dev
 
 # Add user pi
-# RUN useradd -G adm,users,sudo,staff,dialout -s /bin/bash -m pi && \ 
+RUN useradd -G adm,users,sudo,staff,dialout -s /bin/bash -m pi && \ 
 RUN \ 
-	usermod -a -G adm,dialout,sudo,staff,users pi && \ 
+	usermod -a -G adm,dialout,sudo,staff,users,pi pi && \ 
 	echo 'pi:raspberry' | chpasswd
 	
 USER	pi
