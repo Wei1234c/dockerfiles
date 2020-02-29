@@ -28,27 +28,29 @@ RUN \
 	echo 'pi:raspberry' | chpasswd
 	
 RUN \ 
-	chown -R pi:pi /home/pi
-	
+	chown -R pi:pi /home/pi && \ 
+	chown -R root:sudo /tmp && \ 
+	chmod -R 775 /tmp && \ 
+	chown -R root:sudo /usr && \ 
+	chmod -R 775 /usr && \ 
+	chmod 4755 /usr/bin/sudo
+
+RUN \
+        ln -s /usr/local/bin/python3.6 /usr/bin/python3 && \
+        ln -s /usr/local/bin/pip3.6 /usr/bin/pip3
+
+
 USER	pi
 
 WORKDIR /home/pi
 RUN \ 
 	wget https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tar.xz && \ 
-	tar -xvf Python-3.6.10.tar.xz
-
-WORKDIR /home/pi/Python-3.6.10 
-RUN \ 
+	tar -xvf Python-3.6.10.tar.xz && \ 
+	cd Python-3.6.10 && \ 
 	./configure --with-ssl && \ 
-	make
-RUN \ 
-	make altinstall && \ 
-
-RUN \ 
-	sudo ln -s /usr/local/bin/python3.6 /usr/bin/python3 && \ 
-	sudo ln -s /usr/local/bin/pip3.6 /usr/bin/pip3
+	make && \ 
+	make altinstall
 
 
 # Define default command.
-WORKDIR /home/pi
 CMD ["bash"] 
