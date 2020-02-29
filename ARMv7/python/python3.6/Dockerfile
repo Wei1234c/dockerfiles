@@ -53,7 +53,9 @@ RUN \
 RUN \ 
 	make altinstall
 
+WORKDIR /home/pi
+RUN \ 
+	rm -rf Python*
 
 # Define default command.
-WORKDIR /home/pi
 CMD ["bash"] 
