@@ -13,7 +13,7 @@ docker build -t wei1234c/java_sshd_armv7 /dockerfiles/ARMv7/java_sshd
 docker build -t wei1234c/php_armv7:5 /dockerfiles/ARMv7/php/5
 docker build -t wei1234c/php_armv7:cli /dockerfiles/ARMv7/php/5.6
 docker build -t wei1234c/python_armv7 /dockerfiles/ARMv7/python
-docker build -t wei1234c/python_armv7:3.6.10 /dockerfiles/ARMv7/python/python3.6
+docker build -t wei1234c/python_armv7_3.6.10 /dockerfiles/ARMv7/python/python3.6
 docker build -t wei1234c/nodejs_armv7 /dockerfiles/ARMv7/nodejs
 docker build -t wei1234c/jupyter-notebook_armv7 /dockerfiles/ARMv7/notebook
 docker build -t wei1234c/haproxy_armv7 /dockerfiles/ARMv7/haproxy/1.5
@@ -46,7 +46,7 @@ docker push wei1234c/java_sshd_armv7
 docker push wei1234c/php_armv7:5
 docker push wei1234c/php_armv7:cli
 docker push wei1234c/python_armv7
-docker push wei1234c/python_armv7:3.6.10 
+docker push wei1234c/python_armv7_3.6.10 
 docker push wei1234c/nodejs_armv7
 docker push wei1234c/jupyter-notebook_armv7
 docker push wei1234c/haproxy_armv7
