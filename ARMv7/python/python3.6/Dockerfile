@@ -45,12 +45,15 @@ USER	pi
 WORKDIR /home/pi
 RUN \ 
 	wget https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tar.xz && \ 
-	tar -xvf Python-3.6.10.tar.xz && \ 
-	cd Python-3.6.10 && \ 
+	tar -xvf Python-3.6.10.tar.xz
+WORKDIR /home/pi/Python-3.6.10
+RUN \  
 	./configure --with-ssl && \ 
-	make && \ 
+	make
+RUN \ 
 	make altinstall
 
 
 # Define default command.
+WORKDIR /home/pi
 CMD ["bash"] 
