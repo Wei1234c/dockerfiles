@@ -30,4 +30,4 @@ RUN \
  
 # Define default command.
 CMD	["bash"]
-# CMD	["/home/root/rpitx/easytest.sh"] 
+# CMD	["/rpitx/easytest.sh"] 
